@@ -14,25 +14,11 @@ app.use((req, res, next) => {
     next();
 });
 
-/*DB
-const db = mysql.createConnection({
-    host : process.env.DB_HOST,
-    user : process.env.DB_USER,
-    password : process.env.DB_PASSWORD,
-    database : process.env.DB_DATABASE,
-});
 
-db.connect((error)=> {
-    if (error){ throw error;
-    }
-    console.log('MySql est connecté !')
-});*/
 //DB
-const sequelize = new Sequelize(process.env.DB_DATABASE, process.env.DB_USER,process.env.DB_PASSWORD,{ 
-    host: process.env.DB_HOST,
-    dialect: 'mysql'
-});
-sequelize.authenticate()
+const db = require('./config/database');
+//Test DB
+db.authenticate()
     .then(() => {
     console.log('connection établie.');
     })
