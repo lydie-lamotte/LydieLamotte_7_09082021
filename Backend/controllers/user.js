@@ -6,6 +6,10 @@ const password = require('../models/password-validator');
 
 //s'inscrire
 exports.signup = (req, res, next) => {
+    //vérifier que les champs ne soient pas vide
+    if (req.body.lastName == null || req.body.firstName == null || req.body.email == null || req.body.password == null) {
+        res.status(400).json({message: 'Merci de renseigner tous les champs'});
+    }
     //valider l'email
     if (!email.validate(req.body.email)) {
         res.status(400).json({message: 'email non valide'});
@@ -22,7 +26,7 @@ exports.signup = (req, res, next) => {
                 firstName: req.body.firstName,
                 email: req.body.email,
                 password:hash,
-                is_admin: 0
+                isAdmin: 0
             });
             user.save()
                 .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
@@ -33,7 +37,9 @@ exports.signup = (req, res, next) => {
 
 //se connecter
 exports.login = (req, res, next) => {
-    User.findOne({email: req.body.email}) // récupère l'email créé
+    User.findOne({
+        where: {email: req.body.email} //récupère l'email avec la methode where
+    })
         .then(user => {
         if (!user) {  
             return res.status(401).json({ error: 'Utilisateur non trouvé !' });

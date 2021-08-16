@@ -1,10 +1,15 @@
+const dotenv = require('dotenv');
+require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
-const app = express();
-const dotenv = require('dotenv');
+const userRoutes = require('./routes/user');
 const { Sequelize } = require('sequelize');
-const mysql = require('mysql2')
-require('dotenv').config();
+const mysql = require('mysql2');
+const helmet = require('helmet');
+const path = require('path');
+
+
+const app = express();
 
 //CORS
 app.use((req, res, next) => {
@@ -13,8 +18,6 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
     next();
 });
-
-
 //DB
 const db = require('./config/database');
 //Test DB
@@ -28,5 +31,12 @@ db.authenticate()
 
 //SECURITE
 app.use(bodyParser.json());
+app.use(helmet());
+
+//routes
+app.use('/api/auth', userRoutes);
+
+
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 module.exports = app;

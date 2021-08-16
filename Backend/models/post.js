@@ -1,33 +1,25 @@
 const { Sequelize } = require('sequelize');
 const db = require('../config/database');
 
-const user = db.define('user', {
+const post = db.define('post',{
     id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         autoIncrement: true,
         primaryKey: true
     },
-    lastName: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
-    firstName: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
-    email: {
-        type: Sequelize.STRING,
+    userId: {
+        type: Sequelize.INTEGER,
         allowNull: false,
-        unique: true
+        field: 'user_id'
     },
-    password: {
+    content: {
         type: Sequelize.STRING,
         allowNull: false
     },
-    isAdmin: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: 0
+    imagePost: {
+        type: Sequelize.STRING,
+        allowNull: true
     },
     createdAt: {
         type: Sequelize.DATE,
@@ -41,4 +33,4 @@ const user = db.define('user', {
     }
 });
 
-module.exports = user;
+module.exports = post;
