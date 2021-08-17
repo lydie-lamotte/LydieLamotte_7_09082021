@@ -3,6 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const userRoutes = require('./routes/user');
+const postRoutes = require('./routes/post');
 const { Sequelize } = require('sequelize');
 const mysql = require('mysql2');
 const helmet = require('helmet');
@@ -35,7 +36,7 @@ app.use(helmet());
 
 //routes
 app.use('/api/auth', userRoutes);
-
+app.use('/api/post', postRoutes);
 
 app.use('/images', express.static(path.join(__dirname, 'images')));
 

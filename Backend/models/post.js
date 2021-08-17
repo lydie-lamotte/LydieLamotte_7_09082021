@@ -21,6 +21,11 @@ const post = db.define('post',{
         type: Sequelize.STRING,
         allowNull: true
     },
+    like: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        defaultValue: 0
+    },
     createdAt: {
         type: Sequelize.DATE,
         defaultValue: Sequelize.NOW,
