@@ -1,29 +1,25 @@
 const { Sequelize } = require('sequelize');
 const db = require('../config/database');
 
-const post = db.define('post',{
+const comment = db.define('comment',{
     id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         autoIncrement: true,
         primaryKey: true
     },
-    userId: {
+    postId: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        field: 'user_id',
+        field: 'post_id',
         references: {
-            model:'user',
+            model:'post',
             Key:'id'
         }    
     },
-    content: {
+    textComment: {
         type: Sequelize.STRING,
         allowNull: false
-    },
-    imagePost: {
-        type: Sequelize.STRING,
-        allowNull: true
     },
     createdAt: {
         type: Sequelize.DATE,
@@ -37,4 +33,4 @@ const post = db.define('post',{
     }
 });
 
-module.exports = post;
+module.exports = comment;
