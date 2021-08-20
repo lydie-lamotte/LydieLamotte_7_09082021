@@ -5,21 +5,23 @@ const fs = require('fs');
 
 //Créer un post
 exports.createPost = (req, res, next) => {
-    const token = req.headers.authorization.split(' ')[1];
-    const verifyToken = jwt.verify(token, process.env.KEY_SECRET);
-    const userId = verifyToken.userId;
+    const  userId = req.userId ;
+    
     if (req.body.content == null) {
         res.status(400).json({message:'Contenu obligatoire'});
     }
     const post = {
-        userId: userId,
+        userId:userId,
         content: req.body.content,
         imagePost:  req.file ? req.protocol + '://' + req.get('host') + '/images/' + req.file.filename 
         : null
     };
     Post.create(post)
         .then(()=> res.status(201).json({ message: 'Post enregistré !'}))
-        .catch(() => res.status(400).json({ message: "erreur post non enregistré !"} ));          
+        .catch((error) => {
+            console.log(error)
+            res.status(400).json({ message: "erreur post non enregistré !"} )
+        });          
 };
 
 //Récupérer les posts

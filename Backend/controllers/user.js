@@ -53,10 +53,15 @@ exports.login = (req, res, next) => {
             if (!valid) {
                 return res.status(401).json({ error: 'Mot de passe incorrect !' });
             }
+            console.log(user);
             res.status(200).json({
-                userId: user._id,
+               user:{
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    email: user.email
+                },
                 token: jwt.sign( // encoder un nouveau token
-                    { userId: user._id },
+                    { userId: user.id },
                     process.env.KEY_SECRET,
                     { expiresIn: '24h' } // expire au bout de 24h
                 )
