@@ -4,10 +4,14 @@ const fs = require('fs');
 
 //Créer un commentaire
 exports.createComment = (req, res, next) => {
-    if (req.body.textComment == null) {
+    const postId = req.postId;
+    if (req.body.text == null) {
         res.status(400).json({message:'Contenu obligatoire'});
     }
-    const comment = req.body;
+    const comment = {
+        postId: postId,
+        text: req.body.text
+    };
     Comment.create(comment)
         .then(()=> res.status(201).json({ message: 'commentaire enregistré !'}))
         .catch(() => res.status(400).json({ message: "erreur commentaire non enregistré !"} ));          

@@ -17,7 +17,7 @@ const comment = db.define('comment',{
             Key:'id'
         }    
     },
-    textComment: {
+    text: {
         type: Sequelize.STRING,
         allowNull: false
     },
