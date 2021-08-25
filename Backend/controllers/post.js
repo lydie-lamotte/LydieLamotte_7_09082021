@@ -1,19 +1,20 @@
 const Post = require('../models/post');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
+const post = require('../models/post');
 
 
 //Créer un post
 exports.createPost = (req, res, next) => {
     const  userId = req.userId ;
     
-    if (req.body.content == null || req.body.imagePost == null) {
+    if (req.body.content == null || req.body.image == null) {
         res.status(400).json({message:'Contenu obligatoire'});
     }
     const post = {
         userId: userId,
         content: req.body.content,
-        imagePost: req.file ? req.protocol + '://' + req.get('host') + '/images/' + req.file.filename : null
+        image: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     };
     Post.create(post)
         .then(()=> res.status(201).json({ message: 'Post enregistré !'}))
@@ -39,26 +40,19 @@ exports.findOnePost = (req, res, next) => {
     })    
     .then(post => res.status(200).json(post))
     .catch(error => res.status(404).json({error}));         
-}
+};
 
 //Mofifier un post
 exports.modifyPost = (req, res, next) => {
-    const postModifiy = req.file ?
-    {
-        userId: req.body.userId,
-        content: req.body.content,
-        imagePost: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
-    } : {    
-        userId: req.body.userId,
-        content: req.body.content,
-        imagePost: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
-    }
-    Post.update(postModifiy, {
-        where: {id: req.body.id}
-    })
-    .then(()=> res.status(201).json({ message: 'Post modifié !'}))
-    .catch(error => res.status(404).json({error}));         
-}
+    Post.update(
+        { image: req.body.image, content: req.body.content },
+        {where: {
+            id: req.params.id
+        }
+    })    
+    .then(() => res.status(200).json({ message: 'post modifié!'}))
+    .catch(error => res.status(400).json({ message: "erreur post non modifié !"}));       
+};      
 
 //Supprimer un post
 exports.deletePost = (req, res, next) => {
@@ -66,7 +60,7 @@ exports.deletePost = (req, res, next) => {
         where: {id: req.params.id}
     })
     .then(post => {
-        const filename = post.imagePost.split('/images/')[1];
+        const filename = post.image.split('/images/')[1];
         fs.unlink(`images/${filename}`, () => { 
             Post.destroy({where: {id: req.params.id}}) 
                 .then(() => res.status(200).json({ message: 'Post supprimé'}))

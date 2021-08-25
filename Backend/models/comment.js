@@ -17,6 +17,15 @@ const comment = db.define('comment',{
             Key:'id'
         }    
     },
+    userId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        field: 'user_id',
+        references: {
+            model:'user',
+            Key:'id'
+        }    
+    },
     text: {
         type: Sequelize.STRING,
         allowNull: false

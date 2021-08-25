@@ -7,3 +7,5 @@ const comment = require('../models/comment')
 user.hasMany(post);
 
 post.hasMany(comment);
+
+user.hasMany(comment);

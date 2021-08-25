@@ -21,7 +21,7 @@ const post = db.define('post',{
         type: Sequelize.STRING,
         allowNull: false
     },
-    imagePost: {
+    image: {
         type: Sequelize.STRING,
         allowNull: false
     },
