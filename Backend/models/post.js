@@ -34,6 +34,11 @@ const post = db.define('post',{
         type: Sequelize.DATE,
         defaultValue: Sequelize.NOW,
         field: 'updated_at'        
+    },
+    deletedAt: {
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.NOW,
+        field: 'deleted_at'        
     }
 });
 

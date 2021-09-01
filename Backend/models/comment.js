@@ -27,7 +27,7 @@ const comment = db.define('comment',{
         }    
     },
     text: {
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
         allowNull: false
     },
     createdAt: {
@@ -39,6 +39,11 @@ const comment = db.define('comment',{
         type: Sequelize.DATE,
         defaultValue: Sequelize.NOW,
         field: 'updated_at'        
+    },
+    deletedAt: {
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.NOW,
+        field: 'deleted_at'        
     }
 });
 

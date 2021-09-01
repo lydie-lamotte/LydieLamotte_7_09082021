@@ -38,6 +38,11 @@ const user = db.define('user', {
         type: Sequelize.DATE,
         defaultValue: Sequelize.NOW,
         field: 'updated_at'        
+    },
+    deletedAt: {
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.NOW,
+        field: 'deleted_at'        
     }
 });
 

@@ -42,7 +42,7 @@ exports.login = (req, res, next) => {
         res.status(400).json({message: 'Merci de renseigner tous les champs'});
     }
     User.findOne({
-        where: {email: req.body.email} //récupère l'email avec la methode where
+        where: {email: req.body.email, deleted_at: null} //récupère l'email avec la methode where
     })
         .then(user => {
         if (!user) {  
@@ -75,7 +75,8 @@ exports.login = (req, res, next) => {
 //Récupérer les utilisateurs
 exports.findAllUser = (req, res, next) => {
     User.findAll({
-        order: [['updatedAt','DESC']]
+        order: [['updatedAt','DESC']],
+        where: {deleted_at: null}
     })
         .then(Users => res.status(200).json(Users))
         .catch(error => res.status(400).json({ error }));
@@ -83,16 +84,17 @@ exports.findAllUser = (req, res, next) => {
 
 //Récupérer un utilisateur
 exports.findOneUser = (req, res, next) => {
+
     User.findOne({
-        where: {id: req.params.id}
+        where: {id: req.params.id, deleted_at: null}
     })    
     .then(user => res.status(200).json(user))
     .catch(error => res.status(404).json({error}));         
 };
 
-//supprimer utilisateur
+//supprimer utilisateur (soft delete)
 exports.deleteUser = (req, res, next) => {
-    User.destroy({
+    User.update({deleted_at: Date.now()},{
         where : { id: req.params.id }
     })
     .then(() => res.status(200).json({ message: 'Utilisateur supprimé' }))
