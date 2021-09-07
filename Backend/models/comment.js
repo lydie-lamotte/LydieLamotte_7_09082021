@@ -42,7 +42,7 @@ const comment = db.define('comment',{
     },
     deletedAt: {
         type: Sequelize.DATE,
-        defaultValue: Sequelize.NOW,
+        defaultValue: Sequelize.NULL,
         field: 'deleted_at'        
     }
 });

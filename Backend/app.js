@@ -34,6 +34,9 @@ db.authenticate()
 
 //SECURITE
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
+    extended: true
+}));
 app.use(helmet());
 
 //routes
