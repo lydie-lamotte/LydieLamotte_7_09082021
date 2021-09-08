@@ -37,12 +37,12 @@ exports.signup = (req, res, next) => {
 
 //se connecter
 exports.login = (req, res, next) => {
-    //vérifie que les champs de soient pas vide
+    //vérifie que les champs ne soient pas vide
     if (req.body.email == null || req.body.password == null) {
         res.status(400).json({message: 'Merci de renseigner tous les champs'});
     }
     User.findOne({
-        where: {email: req.body.email, deleted_at: null} //récupère l'email avec la methode where
+        where: {email: req.body.email, deleted_at: null} 
     })
         .then(user => {
         if (!user) {  
