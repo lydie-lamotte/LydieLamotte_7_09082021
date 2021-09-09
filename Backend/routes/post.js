@@ -1,5 +1,5 @@
-const express = require('express');//importe express
-const router = express.Router();//crée express
+const express = require('express');
+const router = express.Router();
 
 const auth = require('../middleware/auth');
 const multer = require('../middleware/multer-config');

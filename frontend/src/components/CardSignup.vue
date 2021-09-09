@@ -4,22 +4,22 @@
         <form id="form" action="" method="post"  novalidate="true">
 
             <label for="lastName">
-                <input id="lastName" v-model="lastName" type="text" name="lastName" placeholder="Entrez votre nom" required>
+                <input id="lastName" v-model="lastName" type="text" name="lastName" placeholder="Entrez votre nom" aria-label="nom" required>
             </label>
 
             <label for="firstName">
-                <input id="firstName" v-model="firstName" type="text" name="firstName" placeholder="Entrez votre prénom" required>
+                <input id="firstName" v-model="firstName" type="text" name="firstName" placeholder="Entrez votre prénom" aria-label="prenom" required>
             </label>
 
             <label for="email">
-                <input id="email" v-model="email" type="email" name="email" placeholder="Entrez votre email" required>
+                <input id="email" v-model="email" type="email" name="email" placeholder="Entrez votre email" aria-label="email" required>
             </label> 
 
             <label for="password">
-                <input id="password" v-model="password" type="current-password" name="password" placeholder="Entrez votre mot de passe">
+                <input id="password" v-model="password" type="password" name="password" placeholder="Entrez votre mot de passe" aria-label="mot de passe" required>
             </label> 
         
-            <button id="btnLogin" type="submit" @click="signup">Connexion</button>                     
+            <button id="btnLogin" type="submit" @click="createUser">Connexion</button>                     
         </form>
         <div class="link">
             <p>Vous avez déjà un compte?</p>
@@ -32,7 +32,7 @@
 import axios from "axios";
 
 export default {
-    name: "signup",
+    name: "Signup",
     data() {
         return {
             firstName: "",
@@ -42,10 +42,12 @@ export default {
         }
     },
     methods: {
-        signup() {
-            if (this.firstName != "" && this.lastName != "" && this.email != "" && this.password != "") {
-                const firstName = this.firstName;
-                const lastName = this.lastName;
+        createUser() {
+            const validEmail = /^[a-zA-Z0-9-_.]+[@]{1}[a-zA-Z0-9-_.]+[.]{1}[a-z]{2,10}$/;
+            const validPassword = /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{8,200})/;
+            const firstName = this.firstName;
+            const lastName = this.lastName;
+            if ((this.firstName != "" && this.lastName != "" && this.email != "" && this.password != "") && (validPassword.test(this.password) && validEmail.test(this.email)) ){
                 const user = {
                     firstName: this.firstName,
                     lastName: this.lastName,
@@ -53,14 +55,15 @@ export default {
                     password: this.password
                 }
                 axios.post('http://localhost:3000/api/auth/signup',user) 
-                .then(()=> { 
+                .then(response => { console.log(response)
                     localStorage.setItem('firstName',firstName);
                     localStorage.setItem('lastName',lastName);
-                    console.log(localStorage)
                     alert('Votre compte est bien crée');
-                    this.$router.push({ path: '/' });
+                    this.$router.push('Login');
                 })
                 .catch((error) => {console.log(error)}) 
+            } else {
+                alert('Merci de compléter correctement tous les champs')
             }
         }
     },
@@ -74,9 +77,8 @@ export default {
     margin: auto;
     margin-top: 80px;
     padding-bottom: 50px;
-    background-image: url('../assets/icon.png');
-    background-position: center;
-    background-size: cover;
+    box-shadow: 1px 5px 15px rgba(0,0,0,0.2);
+    margin-bottom: 50px;
 }
 #form {
     display: flex;
@@ -86,6 +88,7 @@ input {
     width: 60%;
     height: 40px;
     margin-bottom: 20px;
+    box-shadow: 1px 10px 5px rgba(0,0,0,0.2);
 }
 #btnLogin {
     width: 20%;
@@ -94,7 +97,10 @@ input {
     background-color: rgb(253, 253, 253);
 }
 #btnLogin:hover {
-    box-shadow: 5px 10px 18px #888888;
+    transform: scale(1.1);
+    box-shadow: 5px 10px 10px #c5c5c5;
+    color: white;
+    background-color:coral;
 }
 #linkLogin {
     text-decoration: none;

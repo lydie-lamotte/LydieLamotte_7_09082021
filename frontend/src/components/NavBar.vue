@@ -1,10 +1,10 @@
 <template>
     <nav>
-        <router-link id="link-home" to="/home">
+        <router-link id="link-home" to="/Home">
             <img id="logo-home" alt="retour à la page accueil" src="../assets/icon-black.png">
         </router-link>
         <div class="nav-link">
-        <router-link id="link-profil" to="/monProfil">Mon profil</router-link>
+        <router-link id="link-profil" to="/MonProfil">Mon profil</router-link>
         <router-link id="link-deconnexion" to="/">Me déconnecter</router-link>  
         </div>     
     </nav>
@@ -13,7 +13,7 @@
 
 <script>
 export default {
-  name: 'home',
+  name: 'Home',
  
 }
 </script>

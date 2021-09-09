@@ -3,6 +3,7 @@
 
         <NavBar />
         <CreatePost />
+
     </div>    
 </template>
 
@@ -12,7 +13,7 @@ import CreatePost from '@/components/CreatePost.vue';
 
 
 export default {
-    name: 'home',
+    name: 'Home',
     components: {
         NavBar,
         CreatePost, 

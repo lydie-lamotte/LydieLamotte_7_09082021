@@ -11,7 +11,7 @@ import HeaderLogin from '@/components/HeaderLogin.vue';
 import CardSignup from '@/components/CardSignup.vue';
 
 export default {
-  name: 'signup',
+  name: 'Signup',
   components: {
     HeaderLogin,
     CardSignup
@@ -19,5 +19,7 @@ export default {
   }
 }
 </script>
+
+
 
 
