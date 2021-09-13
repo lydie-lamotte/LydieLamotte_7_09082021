@@ -32,7 +32,7 @@
 import axios from "axios";
 
 export default {
-    name: "Signup",
+    name: "CardSignup",
     data() {
         return {
             firstName: "",

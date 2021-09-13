@@ -1,17 +1,19 @@
 <template>
-    <div class="created-post">
+    <div id="created-post">
         <div class="profil">
             <img class="image-profil" src=""> 
-            {{firstName + "" + lastName}}             
+            {{firstName}} {{lastName}}             
         </div> 
         <div class="content">
             <input v-model="content" id="newContent" type="text" placeholder="Quoi de neuf?">
         </div>  
 
-        <div>
-            <input type="file" @change="onChange" id="addImage">
-            <button type="submit" @click="addNewPost">Envoyer</button>
-        </div>      
+        <form>
+            <label for="image">
+                <input type="file" name="image" @change="onChange()" id="image">
+            </label>
+            <button type="submit" @click="addNewPost()">Envoyer</button>
+        </form>      
     </div>    
 </template>
 
@@ -19,10 +21,12 @@
 import axios from 'axios';
 
 export default {
-    name: 'Home',
+    name: 'CreatePost',
     data() {
         return {
             post: {
+                firstName: "",
+                lastName: "",
                 id:"",
                 content:"",
                 image:""
@@ -58,6 +62,12 @@ export default {
 
 
 <style scoped>
+#created-post {
+    background-color: rgba(245, 226, 226, 1);
+    text-align: start;
+    padding: 20px;
+    margin-top: 50px;
+}
 .image-profil {
     border: black 1px;
     border-radius: 50%;
@@ -65,12 +75,12 @@ export default {
     height: 50px;
 }
 #newContent {
-    width: 80%;
+    width: 100%;
     height: 40px;
     border-radius: 10px;
-    
+    font-size: 1.3em;
 }
-#addImage {
+#image {
     width: 40%;
     height: 30px;
 }
@@ -78,6 +88,9 @@ button {
     width: 150px;
     height: 30px;
     color: white;
-    background-color: blue;
+    background-color: rgb(216, 60, 60);
+    margin-top: 20px;
+    margin-left: 45%;
+    font-size: 1.2em;
 }
 </style>

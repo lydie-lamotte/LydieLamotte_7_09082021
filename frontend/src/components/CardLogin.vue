@@ -21,7 +21,7 @@
 import axios from "axios";
 
 export default {
-    name: "Login",
+    name: "CardLogin",
     data() {
         return {
             email:"",
