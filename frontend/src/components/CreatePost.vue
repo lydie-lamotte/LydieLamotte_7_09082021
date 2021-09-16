@@ -1,8 +1,7 @@
 <template>
     <div id="created-post">
         <div class="profil">
-            <img class="image-profil" src=""> 
-            {{firstName}} {{lastName}}             
+            <p class="user-name"> {{lastName}} {{firstName}}</p>           
         </div> 
         <div class="content">
             <input v-model="content" id="newContent" type="text" placeholder="Quoi de neuf?">
@@ -10,9 +9,9 @@
 
         <form>
             <label for="image">
-                <input type="file" name="image" @change="onChange()" id="image">
+                <input type="file" name="image" @change="onChange" id="image">
             </label>
-            <button type="submit" @click="addNewPost()">Envoyer</button>
+            <button type="submit" @click="addNewPost">Envoyer</button>
         </form>      
     </div>    
 </template>
@@ -24,20 +23,20 @@ export default {
     name: 'CreatePost',
     data() {
         return {
+            user: {
+                lastName:"",
+                firstName:"",
+            },                 
             post: {
-                firstName: "",
-                lastName: "",
                 id:"",
                 content:"",
                 image:""
-            }
+            },
         }
     },
- 
-
     methods: {
         onChange(event) {
-            this.content = event.target.files[0] || event.dataTransfer.files        
+            this.post.content = event.target.files[0] || event.dataTransfer.files        
         },
         addNewPost() {
             const formData = new FormData();

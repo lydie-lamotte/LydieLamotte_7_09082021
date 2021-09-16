@@ -4,8 +4,8 @@
             <img id="logo-home" alt="retour à la page accueil" src="../assets/icon-black.png">
         </router-link>
         <div class="nav-link">
-        <router-link id="link-profil" to="/MonProfil">Mon profil</router-link>
-        <router-link id="link-deconnexion" to="/">Me déconnecter</router-link>  
+        <router-link id="link-profil" to="/MonProfil"><fa icon="users"/><br>Mon profil</router-link>
+        <p id="link-deconnexion" @click="logout"><fa icon="power-off"/><br>Me déconnecter</p>  
         </div>     
     </nav>
 </template>
@@ -13,7 +13,13 @@
 
 <script>
 export default {
-  name: 'NavBar',
+    name: 'NavBar',
+    methods: {
+        logout() {
+        localStorage.removeItem("token")
+        this.$router.push("/")
+        },    
+    }
  
 }
 </script>
@@ -37,5 +43,10 @@ nav {
 }
 #link-profil:hover, #link-deconnexion:hover {
     color: rgb(235, 101, 11);
+}
+.nav-link {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
 }
 </style>

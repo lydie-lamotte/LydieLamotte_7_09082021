@@ -7,7 +7,7 @@
             </label> 
             <label for="password">
                 <input id="password" v-model="password" type="password" name="password" placeholder="Entrez votre mot de passe" aria-label="mot de passe" required>
-            </label> 
+            </label>
             <button id="btnLogin" type="submit" @click="logUser">Connexion</button>                     
         </form>
         <div class="link">
