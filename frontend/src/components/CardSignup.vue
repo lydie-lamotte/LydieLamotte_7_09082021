@@ -54,12 +54,12 @@ export default {
                     email: this.email,
                     password: this.password
                 }
-                axios.post('http://localhost:3000/api/auth/signup',user) 
+                axios.post('auth/signup', user) 
                 .then(response => { console.log(response)
                     localStorage.setItem('firstName',firstName);
                     localStorage.setItem('lastName',lastName);
                     alert('Votre compte est bien crée');
-                    this.$router.push('Login');
+                    this.$router.push('/Login');
                 })
                 .catch((error) => {console.log(error)}) 
             } else {

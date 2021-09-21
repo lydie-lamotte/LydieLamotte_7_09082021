@@ -33,17 +33,15 @@ export default {
 
         }
     },
-    methods: {
-        getAllPosts(){
-            axios.get("http://localhost:3000/api/post", {
+    mounted() {
+        axios.get("http://localhost:3000/api/post", {
             headers : {
                 'Content-Type': 'application/json',
-                Authorization : "Bearer: " + localStorage.getItem("token")
+                Authorization : "Bearer: " + localStorage.getItem("GPMANIA_token")
             }
         })
-        .then((response) => {this.posts = response.data})
-        .catch((error) => error)
-        },
+        .then((response) => {this.posts = response})
+        .catch((error) => {error});
     }
     
 }

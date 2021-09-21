@@ -1,7 +1,7 @@
 <template>
     <div class=card>
         <h1>Connexion</h1>
-        <form id="form" action="" method="post"  novalidate="true">
+        <form id="form" @submit.prevent="false" novalidate="true">
             <label for="email">
                 <input id="email" v-model="email" type="email" name="email" placeholder="Entrez votre email" aria-label="email" required>
             </label> 
@@ -30,15 +30,17 @@ export default {
     },
     methods: {    
         logUser() {
-            const user = {
+            const userLogin = {
                     email: this.email,
                     password: this.password,
             }
             if (this.email != "" && this.password != "") {
-                axios.post('http://localhost:3000/api/auth/login',user) 
+                axios.post('http://localhost:3000/api/auth/login',userLogin) 
                 .then((response)=> { console.log(response)
-                    localStorage.setItem('token',response.data.token);
-                    this.$router.push('Home');
+                    let user = response.data.user
+                    localStorage.setItem('GPMANIA_token',response.data.token);
+                    localStorage.setItem('GPMANIA_user',JSON.stringify(user));
+                    this.$router.push('/Home');
                 })
                 .catch((error) => {console.log(error)}) 
             } 

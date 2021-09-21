@@ -1,15 +1,15 @@
 <template>
     <div id="created-post">
         <div class="profil">
-            <p class="user-name"> {{lastName}} {{firstName}}</p>           
+            <p class="user-name">Bonjour {{lastName}} {{firstName}}</p>           
         </div> 
-        <div class="content">
-            <input v-model="content" id="newContent" type="text" placeholder="Quoi de neuf?">
-        </div>  
+        <label for="content">
+            <textarea v-model="content" id="content" type="text" placeholder="Quoi de neuf?" required></textarea>
+        </label>  
 
         <form>
             <label for="image">
-                <input type="file" name="image" @change="onChange" id="image">
+                <input type="file" name="image" @change="onFileSelected" id="image" required>
             </label>
             <button type="submit" @click="addNewPost">Envoyer</button>
         </form>      
@@ -22,33 +22,37 @@ import axios from 'axios';
 export default {
     name: 'CreatePost',
     data() {
-        return {
-            user: {
-                lastName:"",
-                firstName:"",
-            },                 
-            post: {
-                id:"",
-                content:"",
-                image:""
-            },
+        const user = JSON.parse(localStorage.getItem('GPMANIA_user'));
+        return {               
+            firstName: user.firstName,
+            lastName: user.lastName, 
+            id:"",
+            content:"",
+            image: null
         }
     },
     methods: {
-        onChange(event) {
-            this.post.content = event.target.files[0] || event.dataTransfer.files        
+        onFileSelected(event) {
+            console.log(event)
+            this.image = event.target.files[0] || event.dataTransfer.files        
         },
         addNewPost() {
             const formData = new FormData();
             if (this.image != null && this.content != null) {
                 formData.append('content', this.content);
                 formData.append('image', this.image);
-                axios.post('http://localhost:3000/api/post/newPost', formData, { 
-                    headers: {
-                    Authorization: 'Bearer ' + localStorage.getItem('token')
-                    }
+                axios.post('http://localhost:3000/api/post/newPost', formData,
+                {
+                headers:{
+                "Content-Type": "multipart/form-data",
+                Authorization: 'Bearer ' + localStorage.getItem('GPMANIA_token')
+                }
                 })
-                .then(response => { console.log(response)
+            
+                .then((response) => { 
+                    console.log(formData)
+                    console.log(response);
+                    alert('votre post est créé!')
                     window.location.reload()
                 })
                 .catch((error) => {console.log(error)}) 
@@ -73,11 +77,11 @@ export default {
     width: 50px;
     height: 50px;
 }
-#newContent {
+#content {
     width: 100%;
     height: 40px;
     border-radius: 10px;
-    font-size: 1.3em;
+    font-size: 1.3em;    
 }
 #image {
     width: 40%;
