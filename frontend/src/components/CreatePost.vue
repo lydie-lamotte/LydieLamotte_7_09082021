@@ -1,7 +1,7 @@
 <template>
     <div id="created-post">
         <div class="profil">
-            <p class="user-name">Bonjour {{lastName}} {{firstName}}</p>           
+            <p class="user-name">Bonjour {{firstName}} {{lastName}}</p>           
         </div> 
         <label for="content">
             <textarea v-model="content" id="content" type="text" placeholder="Quoi de neuf?" required></textarea>
@@ -91,7 +91,7 @@ button {
     width: 150px;
     height: 30px;
     color: white;
-    background-color: rgb(216, 60, 60);
+    background-color: rgb(240, 66, 66);
     margin-top: 20px;
     margin-left: 45%;
     font-size: 1.2em;
