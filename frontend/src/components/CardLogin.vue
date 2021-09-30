@@ -38,8 +38,10 @@ export default {
                 axios.post('http://localhost:3000/api/auth/login',userLogin) 
                 .then((response)=> { console.log(response)
                     let user = response.data.user
+                    let userId = response.data.user.userId
                     localStorage.setItem('GPMANIA_token',response.data.token);
                     localStorage.setItem('GPMANIA_user',JSON.stringify(user));
+                    localStorage.setItem('userId',userId);
                     this.$router.push('/Home');
                 })
                 .catch((error) => {console.log(error)}) 

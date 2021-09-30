@@ -81,7 +81,7 @@ export default {
     width: 100%;
     height: 40px;
     border-radius: 10px;
-    font-size: 1.3em;    
+    font-size: 1.8em;    
 }
 #image {
     width: 40%;

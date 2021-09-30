@@ -11,10 +11,8 @@ library.add(fas)
 //router
 import router from './router';
 
-//formatage date
-import dayjs from 'dayjs';
 
-createApp(App).component('fa',FontAwesomeIcon).use(router).use(dayjs).mount('#app')
+createApp(App).component('fa',FontAwesomeIcon).use(router).mount('#app')
 
 
 
