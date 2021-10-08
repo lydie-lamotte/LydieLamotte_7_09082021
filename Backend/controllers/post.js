@@ -1,37 +1,39 @@
-const Post = require('../models/post');
-const jwt = require('jsonwebtoken');
-const fs = require('fs');
-const post = require('../models/post');
+const db = require ('../models/index')
+const Post = db.post;
+const User = db.user;
+const Comment = db.comment;
 
 
 //Créer un post
 exports.createPost = (req, res, next) => {
     const  userId = req.userId ;
-    console.log( req.file)
-    if (req.body.content == null || req.file == undefined) {
-        res.status(400).json({ message:'Contenu obligatoire' });
-    }
-    let initial_likes = JSON.stringify([])
-    const post = {
-        userId: userId,
-        content: req.body.content,
-        image: `/images/${req.file.filename}`,
-        usersLikes: initial_likes
+    console.log(req.userId) ;
+    // console.log( req.file)
+    // if (req.body.content == null || req.file == undefined) {
+    //     res.status(400).json({ message:'Contenu obligatoire' });
+    // }
+    // let initial_likes = JSON.stringify([])
+    // const post = {
+    //     userId: userId,
+    //     content: req.body.content,
+    //     image: `/images/${req.file.filename}`,
+    //     usersLikes: initial_likes
 
-    };
-    Post.create(post)
-        .then(()=> res.status(201).json({ message: 'Post enregistré !'}))
-        .catch((error) => {
-            console.log(error)
-            res.status(400).json({ message: "erreur post non enregistré !"} )
-        });          
+    // };
+    // Post.create(post)
+    //     .then(()=> res.status(201).json({ message: 'Post enregistré !'}))
+    //     .catch((error) => {
+    //         console.log(error)
+    //         res.status(400).json({ message: "erreur post non enregistré !"} )
+    //     });          
 };
 
 //Récupérer les posts
 exports.findAllPost = (req, res, next) => {
     Post.findAll({
+        include: [{model: User, Comment}],
         order: [['updatedAt','DESC']],
-        where: { deleted_at: null }
+        where: { deleted_at: null },
     })
         .then(posts => {
             let data = {
@@ -41,7 +43,7 @@ exports.findAllPost = (req, res, next) => {
             res.status(200).json(data)
         })
         .catch(error =>{
-            // console.log(error)
+            console.log(error)
             res.status(400).json({ error })
         });
 };

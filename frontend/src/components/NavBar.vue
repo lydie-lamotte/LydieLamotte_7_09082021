@@ -16,7 +16,7 @@ export default {
     name: 'NavBar',
     methods: {
         logout() {
-        localStorage.removeItem('GPMANIA_token')
+        localStorage.clear()
         this.$router.push("/")
         },    
     }

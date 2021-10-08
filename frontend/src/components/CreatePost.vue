@@ -28,7 +28,8 @@ export default {
             lastName: user.lastName, 
             id:"",
             content:"",
-            image: null
+            image: null,
+            userId: user.userId,
         }
     },
     methods: {
@@ -37,10 +38,12 @@ export default {
             this.image = event.target.files[0] || event.dataTransfer.files        
         },
         addNewPost() {
+            console.log(this.userId)
             const formData = new FormData();
             if (this.image != null && this.content != null) {
                 formData.append('content', this.content);
                 formData.append('image', this.image);
+                formData.append('userId', this.userId);
                 axios.post('http://localhost:3000/api/post/newPost', formData,
                 {
                 headers:{

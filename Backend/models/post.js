@@ -1,50 +1,34 @@
-const { Sequelize } = require('sequelize');
-const db = require('../config/database');
-
-const post = db.define('post',{
-    id: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true
-    },
-    userId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        field: 'user_id',
-        references: {
-            model:'user',
-            Key:'id'
-        }    
-    },
-    content: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
-    image: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
-    usersLikes: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
-    createdAt: {
-        type: Sequelize.DATE,
-        defaultValue: Sequelize.NOW,
-        field: 'created_at'
-    },
-    updatedAt: {
-        type: Sequelize.DATE,
-        defaultValue: Sequelize.NOW,
-        field: 'updated_at'        
-    },
-    deletedAt: {
-        type: Sequelize.DATE,
-        defaultValue: Sequelize.NULL,
-        field: 'deleted_at'        
+'use strict';
+const { Model } = require('sequelize');
+module.exports = (sequelize, DataTypes) => {
+    class Post extends Model {
+        /**
+        * Helper method for defining associations.
+        * This method is not a part of Sequelize lifecycle.
+        * The `models/index` file will call this method automatically.
+        */
+    static associate(models) {
+        // define association here
+        models.post.belongsTo(models.user, {
+            foreignKey: 'userId'           
+        }),
+        models.post.hasMany(models.comment)
     }
-});
+    };
+    Post.init({
+        content: DataTypes.STRING, 
+        userId: DataTypes.INTEGER,
+        image: DataTypes.STRING,
+        usersLikes: DataTypes.STRING,
+        deleted_at: DataTypes.DATE,
+    }, {
+        sequelize,
+        modelName: 'Post',
+    }); 
+    return Post;
+};
+
+
 
 // ,{
 //     hooks:{
@@ -78,4 +62,4 @@ const post = db.define('post',{
 // }
 
 
-module.exports = post;
+

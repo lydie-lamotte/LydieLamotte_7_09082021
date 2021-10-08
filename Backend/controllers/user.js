@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const User = require('../models/user');
+const db = require('../models/index')
+const User = db.user;
 const email = require('email-validator');
 const password = require('../models/password-validator');
 

@@ -1,17 +1,16 @@
-const Comment = require('../models/comment');
-
-const fs = require('fs');
+const db = require ('../models/index');
+const Comment = db.comment;
 
 //Créer un commentaire
 exports.createComment = (req, res, next) => {
-    const postId = req.body.postId;
+    const postId = req.body.post_id;
     const userId = req.userId
     if (req.body.text == null) {
         res.status(400).json({message:'Contenu obligatoire'});
     }    
     const comment =  {
         userId: userId,
-        postId: postId,
+        post_id: postId,
         text: req.body.text
     };
     Comment.create(comment)

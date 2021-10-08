@@ -59,7 +59,7 @@ export default {
                     localStorage.setItem('firstName',firstName);
                     localStorage.setItem('lastName',lastName);
                     alert('Votre compte est bien créé');
-                    this.$router.push('/');
+                    this.$router.push('/Login');
                 })
                 .catch((error) => {console.log(error)}) 
             } else {

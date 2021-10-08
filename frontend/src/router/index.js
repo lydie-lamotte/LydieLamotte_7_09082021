@@ -7,7 +7,7 @@ import MonProfil from '@/views/MonProfil.vue';
 const routes = [
     {
         name: 'Login',
-        path:'/',
+        path:'/Login',
         component: Login,
     }, {
         name: 'Signup',

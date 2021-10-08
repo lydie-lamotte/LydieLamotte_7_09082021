@@ -4,8 +4,8 @@
        <div v-else>
            <div id="posts" v-for="p in posts" :key="p.id">
                 <div class="info-user">
-                    <p class="user-name">{{ p.userId }} {{ p.lastName }}</p>
-                    <p class="post-date">publié le {{ p.updatedAt }}</p>
+                    <p class="user-name"> {{ p.userId }}</p>
+                    <p class="post-date">publié le {{ getDate(p.updatedAt)}}</p>
                 </div>
                 <br>
                 <img id="image-post" :src="getPictureUrl(p.image)">
@@ -13,21 +13,10 @@
                 <div class="button">
                     <button class="like" @click="like"><fa icon="thumbs-up"/></button>
                     <p class="number-like">{{ p.usersLikes }} j'aime</p>
-                    <button class="delete" type="submit" v-show="userId == p.userId" @click="deletePost"><fa icon="trash-alt"/></button> 
+                    <button class="delete" type="submit" v-if="userId == p.userId" @click="deletePost"><fa icon="trash-alt"/></button> 
                 </div>
-                <div class="comment">
-                    <textarea v-model="comment.text" id="text" type="text" placeholder="Commenter..."></textarea>
-                    <button class="send" type="submit" @click="sendComment"><fa icon="arrow-alt-circle-right"/></button>
-                </div>
-                <template v-if="p.comments !== null">
-                    <div class="comments" v-for="comment in comments" :key="comment.id">
-                        <div class="info-user">
-                            <p class="user-comment"> {{comment.userId}} {{comment.userId.lastName}}</p>
-                            <p class="comment-date">commenté le {{ comment.updatedAt }}</p>
-                        </div>
-                        <p class="text">{{ comment.text }}</p> 
-                    </div> 
-                </template>            
+                <CreateComment />
+                <!--<Comment /> -->         
             </div>
        </div>
    </div>  
@@ -35,10 +24,17 @@
 
 <script>
 import axios from "axios";
-//import dayjs from "dayjs";
+import CreateComment from "@/components/CreateComment";
+//import Comment from "@/components/Comment";
+
 
 export default {
     name: "Posts",
+    components: {
+       CreateComment,
+       // Comment
+        
+    },
     data() {
         return {
             media_url: null,
@@ -60,13 +56,16 @@ export default {
             comments: [],
             comment: {
                 text:"",
-                userId:localStorage.getItem('userId'),
+                user_id: localStorage.getItem('userId'),
                 postId:"",
                 id:"",
                 updatedAt: null,           
             },
             token: localStorage.getItem('GPMANIA_token'),
             userId: localStorage.getItem('userId'),
+            commentText: {
+                text: "",
+            },
         }
     },
     created() {
@@ -83,35 +82,23 @@ export default {
             this.posts = posts
             this.media_url = media_url
             this.loading = false
-            //const updatedAt = dayjs(this.p.updatedAt).format("LLLL")
         })
         .catch((error) => {error});
         
-    },
-    mounted() {
-        axios.get("http://localhost:3000/api/comment", {
-            headers : {
-                'Content-Type': 'application/json',
-                Authorization : "Bearer: " + this.token
-            }
-        })
-        .then((response) => {
-            let data = response.data
-            const comments = data
-            console.log(comments)
-            this.comments = comments
-        })
-        .catch((error) => {error});
     },
     methods: {
         getPictureUrl(imageUrl){
             console.log(this.media_url)
             return `${this.media_url}${imageUrl} `
         },
+        getDate(datetime) {
+            let date = new Date(datetime).toLocaleString()
+            return date            
+        },
         like() {
-            const post = this.post.userId
-            const usersLikes = post.usersLikes
-            axios.post("http://localhost:3000/api/post/:id/like", usersLikes, {
+            const id = this.post.id
+            const usersLikes = this.post.usersLikes
+            axios.post("http://localhost:3000/api/post"+ id +"/like", usersLikes, {
                 headers : {
                     'Content-Type': 'application/json',
                     Authorization : "Bearer: " + this.token
@@ -131,33 +118,11 @@ export default {
             })
             const response = confirm(" Voulez vous supprimer ce post?");
             if (response) {
-                this.$router.go();
+                window.location.reload();
             }
             }
-        },
-        sendComment() {
-            const newComment = {
-                text: this.comment.text,
-                userId: this.comment.userId,
-                postId: this.comment.postId
-            } 
-            if (this.comment.text != null) { 
-                axios.post("http://localhost:3000/api/comment/newCmt", newComment, {
-                    headers : {
-                    'Content-Type': 'application/json',
-                    Authorization : "Bearer: " + this.token
-                    }   
-                })
-                .then((response)=> { console.log(response)
-                    alert('votre commentaire est créé!')
-                    window.location.reload()
-                })
-                .catch((error) => {console.log(error)})  
-            }
-        }
-    }
-
-    
+        }     
+    }    
 }
 </script>
 
@@ -189,32 +154,14 @@ img {
     margin: auto;
     width: 80%;
 }
-textarea {
-    width: 70%;
-    height: 40px;
-    border-radius: 10px;
-    font-size: 1.7em;
-    margin-bottom: 20px;
-}
 /* bouton*/
 .button {
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: center;
     margin-top: 10px;
 }
-.send {
-    color: green;
-    font-size: 2.5em;
-    border: none;
-    background-color: rgba(245, 226, 226, 1);
-    opacity: 0.6;
-    transition: 0.3s;
-    cursor: pointer;
-}
-.send:hover {
-    opacity: 1;
-}
+
 .like {
     color: blue;
     font-size: 1.8em;
@@ -223,6 +170,7 @@ textarea {
     opacity: 0.5;
     transition: ease-in-out;
     cursor: pointer;
+    margin-right: 50px;
 }
 .like:hover {
     opacity: 1;    
@@ -233,16 +181,23 @@ textarea {
     font-size: 1.5em;
     cursor: pointer;
     opacity: 0.5;
+    margin-left: 50px;
 }
 .delete:hover {
     opacity: 1;
 }
-/*commentaire*/
-.comment {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-evenly;
+.deleteCmt {
+    border: none;
+    background-color:rgb(247, 241, 232);
+    font-size: 1.2em;
+    cursor: pointer;
+    opacity: 0.5;
+    margin-right: 30px;
 }
+.deleteCmt:hover {
+    opacity: 1;
+}
+/*commentaire*/
 .comments {
     background-color: rgb(247, 241, 232);
     border-radius: 20px;
@@ -252,7 +207,11 @@ textarea {
 }
 .text {
     text-align: start;
-    padding-bottom: 20px;
     padding-left: 30px;
+}
+.comment-text {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
 }
 </style>

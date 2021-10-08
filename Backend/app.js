@@ -22,15 +22,25 @@ app.use((req, res, next) => {
 });
 
 //DB
-const db = require('./config/database');
-//Test DB
-db.authenticate()
-    .then(() => {
-    console.log('connection établie.');
-    })
-    .catch(error => {
-    console.error('connection refusée, erreur:', error);
-    });
+const sequelize = new Sequelize({
+
+    host: 'DB_HOST', 
+    user: 'DB_USER', 
+    password: 'DB_PASSWORD',
+    database: 'DB_DATABASE',
+    dialect: "mysql"
+
+});
+const db = {};
+try {
+  db;
+  console.log('Vous êtes connecté à MySQL!');
+} catch (error) {
+  console.error('Impossible de se connecter, erreur suivante :', error);
+}
+
+db.Sequelize = Sequelize;
+db.sequelize = sequelize;
 
 //SECURITE
 app.use(bodyParser.json());
