@@ -73,3 +73,22 @@ export default {
     
 }
 </script>
+
+<style scoped>
+.comments {
+    background-color: rgb(247, 241, 232);
+    border-radius: 20px;
+    width: 80%;
+    margin: auto;
+    margin-top: 30px
+}
+.text {
+    text-align: start;
+    padding-left: 30px;
+}
+.comment-text {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+</style>

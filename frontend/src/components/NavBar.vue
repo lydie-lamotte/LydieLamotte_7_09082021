@@ -49,4 +49,14 @@ nav {
     align-items: center;
     cursor: pointer;
 }
+/*portable*/
+@media screen and (max-width: 550px) {
+    nav {
+        display: block;
+    }
+    .nav-link {
+        margin-left: 90px;
+        margin-top: 30px;
+    }
+}
 </style>

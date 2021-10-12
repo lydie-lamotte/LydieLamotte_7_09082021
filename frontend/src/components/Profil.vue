@@ -68,4 +68,11 @@ export default {
     box-shadow: 5px 5px 30px rgb(155, 152, 152);
     opacity: 1;
 }
+/* media queries*/
+/*portable*/
+@media screen and (max-width: 550px) {
+    .profil {
+        width: 100%;
+    }
+}
 </style>

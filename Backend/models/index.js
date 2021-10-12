@@ -34,25 +34,6 @@ db.post.associate(db);
 db.user.associate(db);
 db.comment.associate(db)
 
-// db.user.hasMany(db.post);
-
-// db.post.belongsTo(db.user, {
-//   foreignKey: "userId",
-// });
-
-// db.user.hasMany(db.comment); 
-
-// db.comment.belongsTo(db.user, {
-//   foreignKey: "user_id",
-// });
-// db.post.hasMany(db.comment);
-
-// db.comment.belongsTo(db.post, {
-//   foreignKey: "postId",
-// });
-
-
-
 module.exports = db;
 
 

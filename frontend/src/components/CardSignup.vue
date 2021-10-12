@@ -59,7 +59,7 @@ export default {
                     localStorage.setItem('firstName',firstName);
                     localStorage.setItem('lastName',lastName);
                     alert('Votre compte est bien créé');
-                    this.$router.push('/Login');
+                    this.$router.push("/");
                 })
                 .catch((error) => {console.log(error)}) 
             } else {
@@ -91,7 +91,7 @@ input {
     box-shadow: 1px 10px 5px rgba(0,0,0,0.2);
 }
 #btnLogin {
-    width: 20%;
+    width: 30%;
     height: 40px;
     margin: auto;
     background-color: rgb(253, 253, 253);
@@ -108,5 +108,23 @@ input {
 #linkLogin:hover {
     color: blue;
 }
+/*portable*/
+@media screen and (max-width: 550px) { 
+    .card {
+        width: 100%;
+    } 
+    #btnLogin {
+        width: 50%;
+    }
+}      
+/*tablette*/
+@media screen and (max-width: 950px) and (min-width: 551px){
+    .card {
+        width: 70%;
+    }
+    #btnLogin {
+        width: 50%;
+    }
+}     
 
 </style>

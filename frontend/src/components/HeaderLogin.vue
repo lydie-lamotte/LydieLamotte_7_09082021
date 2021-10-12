@@ -20,4 +20,9 @@ h1 {
   font-size: 1.5em;
   
 }
+@media screen and (max-width: 550px) {
+  #logo {
+    width: 100%;
+  }
+}
 </style>

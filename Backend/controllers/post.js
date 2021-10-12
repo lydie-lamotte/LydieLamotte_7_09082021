@@ -8,24 +8,24 @@ const Comment = db.comment;
 exports.createPost = (req, res, next) => {
     const  userId = req.userId ;
     console.log(req.userId) ;
-    // console.log( req.file)
-    // if (req.body.content == null || req.file == undefined) {
-    //     res.status(400).json({ message:'Contenu obligatoire' });
-    // }
-    // let initial_likes = JSON.stringify([])
-    // const post = {
-    //     userId: userId,
-    //     content: req.body.content,
-    //     image: `/images/${req.file.filename}`,
-    //     usersLikes: initial_likes
+    console.log( req.file)
+    if (req.body.content == null || req.file == undefined) {
+        res.status(400).json({ message:'Contenu obligatoire' });
+    }
+    let initial_likes = JSON.stringify([])
+    const post = {
+        userId: userId,
+        content: req.body.content,
+        image: `/images/${req.file.filename}`,
+        usersLikes: initial_likes
 
-    // };
-    // Post.create(post)
-    //     .then(()=> res.status(201).json({ message: 'Post enregistré !'}))
-    //     .catch((error) => {
-    //         console.log(error)
-    //         res.status(400).json({ message: "erreur post non enregistré !"} )
-    //     });          
+    };
+    Post.create(post)
+        .then(()=> res.status(201).json({ message: 'Post enregistré !'}))
+        .catch((error) => {
+            console.log(error)
+            res.status(400).json({ message: "erreur post non enregistré !"} )
+    });          
 };
 
 //Récupérer les posts

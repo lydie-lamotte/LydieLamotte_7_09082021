@@ -11,7 +11,7 @@
             <label for="image">
                 <input type="file" name="image" @change="onFileSelected" id="image" required>
             </label>
-            <button type="submit" @click="addNewPost">Envoyer</button>
+            <button type="submit" @click.prevent="addNewPost">Envoyer</button>
         </form>      
     </div>    
 </template>

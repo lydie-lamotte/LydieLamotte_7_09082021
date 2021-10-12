@@ -4,7 +4,7 @@
        <div v-else>
            <div id="posts" v-for="p in posts" :key="p.id">
                 <div class="info-user">
-                    <p class="user-name"> {{ p.userId }}</p>
+                    <p class="user-name"> {{ p.user.lastName }} {{p.user.firstName}}</p>
                     <p class="post-date">publié le {{ getDate(p.updatedAt)}}</p>
                 </div>
                 <br>
@@ -140,6 +140,9 @@ export default {
     justify-content: space-between;
     padding: 0 30px;
 }
+.user-name{
+    text-transform: uppercase;
+}
 img {
     width: 700px;
     height: 500px;
@@ -150,7 +153,7 @@ img {
     font-size: 1.5em;
     border: black 1px solid;
     text-align: start;
-    padding: 15px;
+    padding: 5px;
     margin: auto;
     width: 80%;
 }
@@ -197,21 +200,30 @@ img {
 .deleteCmt:hover {
     opacity: 1;
 }
-/*commentaire*/
-.comments {
-    background-color: rgb(247, 241, 232);
-    border-radius: 20px;
-    width: 80%;
-    margin: auto;
-    margin-top: 30px
-}
-.text {
-    text-align: start;
-    padding-left: 30px;
-}
-.comment-text {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-}
+/* media queries*/
+/*portable*/
+@media screen and (max-width: 550px) { 
+    #posts {
+        width: 100%;
+    }
+    img {
+        width: 100%;
+    } 
+    .post-date {
+        font-size: 0.8em;
+        padding-top: 6px;
+    }
+}      
+/*tablette*/
+@media screen and (max-width: 950px) and (min-width: 551px){
+    #posts {
+        width: 80%;
+    }
+    img {
+        width: 70%;
+    }
+    .post-date {
+        font-size: 0.6em;
+    }
+} 
 </style>

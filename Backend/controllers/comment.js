@@ -1,16 +1,19 @@
 const db = require ('../models/index');
 const Comment = db.comment;
+const Post = db.post;
+const User = db.user;
 
 //Créer un commentaire
 exports.createComment = (req, res, next) => {
-    const postId = req.body.post_id;
-    const userId = req.userId
+    const postId = req.body.postId;
+    const user_id = req.userId;
+    console.log(req.body)
     if (req.body.text == null) {
         res.status(400).json({message:'Contenu obligatoire'});
     }    
     const comment =  {
-        userId: userId,
-        post_id: postId,
+        user_id: user_id,
+        postId: postId,
         text: req.body.text
     };
     Comment.create(comment)
@@ -21,6 +24,7 @@ exports.createComment = (req, res, next) => {
 //Récupérer les commentaires
 exports.findAllComment = (req, res, next) => {
     Comment.findAll({
+        include: [{model: User, Post}],
         order: [['updatedAt','DESC']],
         where: {deleted_at: null}
     })

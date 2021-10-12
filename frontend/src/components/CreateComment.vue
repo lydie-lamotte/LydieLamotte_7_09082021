@@ -1,8 +1,10 @@
 <template>
-    <div class="comment">
-        <textarea v-model="comment.text" id="text" type="text" placeholder="Commenter..."></textarea>
-        <button class="send" type="submit" @click="sendComment(p.id)"><fa icon="arrow-alt-circle-right"/></button>
-    </div>
+    <form @submit.prevent="sendComment(post.id)">
+        <div class="comment">
+            <textarea v-model="comment.text" id="text" type="text" placeholder="Commenter..."></textarea>
+            <button class="send" type="submit" ><fa icon="arrow-alt-circle-right"/></button>
+        </div>
+    </form>
 </template>
 
 <script>
@@ -11,25 +13,33 @@ import axios from "axios";
 export default {
     name: "CreateComment",
     props: {
-        posts: [],
-        
-    },
+            posts: [],
+        },
     data() {
         return { 
             userId: parseInt(localStorage.getItem('userId')),
             comment: {
                 text:"",
                 user_id: "",
-                postId:"",
-            }
+                postId: "",
+            },
+            post: {
+                userId: parseInt(localStorage.getItem('userId')),
+                id: "",
+                content:"",
+                image:"",
+                comments:[],
+            },
+            token: localStorage.getItem('GPMANIA_token'),
         }    
     },
     methods: {
         sendComment() {
+            console.log(this.postId)
             const newComment = {
                 text: this.comment.text,
-                user_id: this.user_id, // id utilisateur connecter,
-                postId: this.comment.postId
+                user_id: this.userId, // id utilisateur connecter,
+                postId: this.postId,
             } 
             if (this.comment.text != null) { 
                 axios.post("http://localhost:3000/api/comment/newCmt", newComment, {
