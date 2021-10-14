@@ -1,13 +1,13 @@
 <template>
-    <div class="comments" v-if="post.Comments !== null">
+    <div class="comments" >
         <div v-for="comment in comments" v-bind:key="comment.id">
             <div class="info-user">
-                <p class="user-comment"> {{commentLastName}} {{commentFirstName}} </p>
+                <p class="user-comment"> {{comment.user.lastName}} {{comment.user.firstName}} </p>
                 <p class="comment-date">commenté le {{ getDate(comment.updatedAt) }}</p>
             </div>
             <div class="comment-text">
-                <p class="text">{{ commentText }}</p> 
-                <button class="deleteCmt" type="submit" v-if="userId == comment.userId" @click="deleteCom"><fa icon="trash-alt"/></button> 
+                <p class="text">{{ comment.text }}</p> 
+                <button class="deleteCmt" type="submit" v-if="userId == comment.user_id" @click="deleteCom"><fa icon="trash-alt"/></button> 
             </div>
         </div>    
     </div> 
@@ -20,7 +20,8 @@ export default {
     name:"Comment",
     data() {
         return {
-            user_id: localStorage.getItem('userId'),
+            userId: localStorage.getItem('userId'),
+            token: localStorage.getItem('GPMANIA_token'),
             user: {
                 lastName:"",
                 firstName:"",

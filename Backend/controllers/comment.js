@@ -6,8 +6,7 @@ const User = db.user;
 //Créer un commentaire
 exports.createComment = (req, res, next) => {
     const postId = req.body.postId;
-    const user_id = req.userId;
-    console.log(req.body)
+    const user_id = req.body.user_id;
     if (req.body.text == null) {
         res.status(400).json({message:'Contenu obligatoire'});
     }    
@@ -28,7 +27,12 @@ exports.findAllComment = (req, res, next) => {
         order: [['updatedAt','DESC']],
         where: {deleted_at: null}
     })
-    .then(Comments => res.status(200).json(Comments))
+    .then(comments => {
+        let data = {
+            'comments': comments,
+        }
+        res.status(200).json(data)
+    })
     .catch(error => res.status(400).json({ error}));
 };
 

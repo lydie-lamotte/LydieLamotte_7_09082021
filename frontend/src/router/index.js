@@ -3,6 +3,7 @@ import Login from '@/views/Login.vue';
 import Signup from '@/views/Signup.vue';
 import Home from '@/views/Home.vue';
 import MonProfil from '@/views/MonProfil.vue';
+import UpdatedProfil from '@/views/UpdatedProfil.vue'
 
 const routes = [
     {
@@ -21,6 +22,10 @@ const routes = [
         name:'MonProfil',
         path:'/MonProfil',
         component: MonProfil,
+    }, {
+        name:'UpdatedProfil',
+        path: '/UpdatedProfil',
+        component: UpdatedProfil,
     }
 ];
 const router = createRouter({

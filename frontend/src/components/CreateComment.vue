@@ -35,12 +35,14 @@ export default {
     },
     methods: {
         sendComment() {
-            console.log(this.postId)
+            const id = this.post
+            console.log(id);
             const newComment = {
                 text: this.comment.text,
                 user_id: this.userId, // id utilisateur connecter,
-                postId: this.postId,
+                postId: this.id,
             } 
+            console.log(newComment)
             if (this.comment.text != null) { 
                 axios.post("http://localhost:3000/api/comment/newCmt", newComment, {
                     headers : {

@@ -16,7 +16,7 @@
                     <button class="delete" type="submit" v-if="userId == p.userId" @click="deletePost"><fa icon="trash-alt"/></button> 
                 </div>
                 <CreateComment />
-                <!--<Comment /> -->         
+                <Comment />          
             </div>
        </div>
    </div>  
@@ -25,14 +25,14 @@
 <script>
 import axios from "axios";
 import CreateComment from "@/components/CreateComment";
-//import Comment from "@/components/Comment";
+import Comment from "@/components/Comment";
 
 
 export default {
     name: "Posts",
     components: {
        CreateComment,
-       // Comment
+       Comment
         
     },
     data() {
@@ -98,6 +98,7 @@ export default {
         like() {
             const id = this.post.id
             const usersLikes = this.post.usersLikes
+            console.log(this.post.usersLikes)
             axios.post("http://localhost:3000/api/post"+ id +"/like", usersLikes, {
                 headers : {
                     'Content-Type': 'application/json',
