@@ -1,49 +1,55 @@
-const { Sequelize } = require('sequelize');
-const db = require('../config/database');
+module.exports = (sequelize, DataTypes) => {
+    const user = sequelize.define('users', {
+        id: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            autoIncrement: true,
+            primaryKey: true
+        },
+        lastName: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        firstName: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        email: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            unique: true
+        },
+        password: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        isAdmin: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: 0
+        },
+        createdAt: {
+            type: DataTypes.DATE,
+            defaultValue: sequelize.NOW,
+            field: 'created_at'
+        },
+        updatedAt: {
+            type: DataTypes.DATE,
+            defaultValue: sequelize.NOW,
+            field: 'updated_at'        
+        },
+        deletedAt: {
+            type: DataTypes.DATE,
+            defaultValue: sequelize.NULL,
+            field: 'deleted_at'        
+        }
+    });
 
-const user = db.define('user', {
-    id: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true
-    },
-    lastName: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
-    firstName: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
-    email: {
-        type: Sequelize.STRING,
-        allowNull: false,
-        unique: true
-    },
-    password: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
-    isAdmin: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: 0
-    },
-    createdAt: {
-        type: Sequelize.DATE,
-        defaultValue: Sequelize.NOW,
-        field: 'created_at'
-    },
-    updatedAt: {
-        type: Sequelize.DATE,
-        defaultValue: Sequelize.NOW,
-        field: 'updated_at'        
-    },
-    deletedAt: {
-        type: Sequelize.DATE,
-        defaultValue: Sequelize.NULL,
-        field: 'deleted_at'        
-    }
-});
+    // associate user to posts
+    user.associate = (models) => {
+        users.hasMany(models.post, {
+          onDelete: "cascade",
+        });
+    };
 
-module.exports = user;
+    return user ;
+}

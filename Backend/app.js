@@ -5,8 +5,8 @@ const bodyParser = require('body-parser');
 const userRoutes = require('./routes/user');
 const postRoutes = require('./routes/post');
 const commentRoutes = require('./routes/comment')
-const { Sequelize } = require('sequelize');
-const mysql = require('mysql2');
+//DB
+const db = require('./models');
 const helmet = require('helmet');
 const path = require('path');
 
@@ -21,15 +21,19 @@ app.use((req, res, next) => {
     next();
 });
 
-//DB
-const db = require('./config/database');
+
 //Test DB
-db.authenticate()
+//Connection à la base de données
+db.sequelize
+    .authenticate()
     .then(() => {
-    console.log('connection établie.');
+        console.log('connexion à la base de données');
+        db.sequelize.sync({
+            /* force:true */
+        })
     })
     .catch(error => {
-    console.error('connection refusée, erreur:', error);
+        console.log(error);
     });
 
 //SECURITE
