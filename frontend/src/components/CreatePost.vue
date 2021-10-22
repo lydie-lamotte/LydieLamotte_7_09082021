@@ -38,7 +38,6 @@ export default {
             this.image = event.target.files[0] || event.dataTransfer.files        
         },
         addNewPost() {
-            console.log(this.userId)
             const formData = new FormData();
             if (this.image != null && this.content != null) {
                 formData.append('content', this.content);

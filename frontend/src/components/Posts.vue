@@ -15,7 +15,7 @@
                     <p class="number-like">{{ p.usersLikes }} j'aime</p>
                     <button class="delete" type="submit" v-if="userId == p.userId" @click="deletePost"><fa icon="trash-alt"/></button> 
                 </div>
-                <CreateComment />
+                <CreateComment :post="p" />
                 <Comment />          
             </div>
        </div>
@@ -32,13 +32,11 @@ export default {
     name: "Posts",
     components: {
        CreateComment,
-       Comment
-        
+       Comment        
     },
     data() {
         return {
             media_url: null,
-            posts: [],
             loading:true,
             user: {
                 firstName:"",
@@ -50,10 +48,12 @@ export default {
                 content:"",
                 image:"",
                 usersLikes:[],
+                option: "" ,
                 id:"",
                 updatedAt: null,
+                comments: [],
             },
-            comments: [],
+            
             comment: {
                 text:"",
                 user_id: localStorage.getItem('userId'),
@@ -63,11 +63,14 @@ export default {
             },
             token: localStorage.getItem('GPMANIA_token'),
             userId: localStorage.getItem('userId'),
-            commentText: {
-                text: "",
-            },
         }
     },
+   /* computed: {
+        posts() {
+            //getters
+            return this.$store.getters.getPosts;
+        }
+    },*/
     created() {
         axios.get("http://localhost:3000/api/post", {
             headers : {
@@ -98,14 +101,14 @@ export default {
         like() {
             const id = this.post.id
             const usersLikes = this.post.usersLikes
-            console.log(this.post.usersLikes)
             axios.post("http://localhost:3000/api/post"+ id +"/like", usersLikes, {
                 headers : {
                     'Content-Type': 'application/json',
                     Authorization : "Bearer: " + this.token
                 }
             })
-            .then(res => console.log(res));
+            .then(res => console.log(res))
+            .catch((error) => {error});
         },
         deletePost() {            
             const id = this.userId;

@@ -1,8 +1,8 @@
 <template>
-    <div class="comments" >
+    <div class="comment">
         <div v-for="comment in comments" v-bind:key="comment.id">
             <div class="info-user">
-                <p class="user-comment"> {{comment.user.lastName}} {{comment.user.firstName}} </p>
+                <p class="user-comment"> {{comment.user_id}} {{user.firstName}} </p>
                 <p class="comment-date">commenté le {{ getDate(comment.updatedAt) }}</p>
             </div>
             <div class="comment-text">
@@ -18,6 +18,7 @@ import axios from "axios";
 
 export default {
     name:"Comment",
+    
     data() {
         return {
             userId: localStorage.getItem('userId'),
@@ -26,15 +27,16 @@ export default {
                 lastName:"",
                 firstName:"",
             },
-            comments:[],
+            posts:[],
             comment: {
                 text:"",
                 user_id:"",
                 postId:"",
-            }
+            },
+            comments: []
         }
     },
-    mounted() {
+    created() {
         axios.get("http://localhost:3000/api/comment", {
             headers : {
                 'Content-Type': 'application/json',
