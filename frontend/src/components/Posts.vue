@@ -15,7 +15,7 @@
                     <p class="number-like">{{ p.usersLikes }} j'aime</p>
                     <button class="delete" type="submit" v-if="userId == p.userId" @click="deletePost"><fa icon="trash-alt"/></button> 
                 </div>
-                <CreateComment />
+                <CreateComment  :post="p" />
                 <Comment />          
             </div>
        </div>
@@ -46,7 +46,7 @@ export default {
                 id:"",
             },
             post: { 
-                userId: localStorage.getItem('userId'),
+                userId: "",
                 content:"",
                 image:"",
                 usersLikes:[],
@@ -56,7 +56,7 @@ export default {
             comments: [],
             comment: {
                 text:"",
-                user_id: localStorage.getItem('userId'),
+                userId:"",
                 postId:"",
                 id:"",
                 updatedAt: null,           

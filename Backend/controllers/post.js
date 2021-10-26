@@ -6,7 +6,7 @@ const Comment = db.comment;
 
 //Créer un post
 exports.createPost = (req, res, next) => {
-    const  userId = req.userId ;
+    const  userId = req.body.userId ;
     console.log(req.userId) ;
     console.log( req.file)
     if (req.body.content == null || req.file == undefined) {

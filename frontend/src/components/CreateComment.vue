@@ -1,5 +1,5 @@
 <template>
-    <form @submit.prevent="sendComment(post.id)">
+    <form @submit.prevent="sendComment()">
         <div class="comment">
             <textarea v-model="comment.text" id="text" type="text" placeholder="Commenter..."></textarea>
             <button class="send" type="submit" ><fa icon="arrow-alt-circle-right"/></button>
@@ -12,38 +12,29 @@ import axios from "axios";
 
 export default {
     name: "CreateComment",
-    props: {
-            posts: [],
-        },
+    props:{
+        post: Object
+    },
     data() {
         return { 
             userId: parseInt(localStorage.getItem('userId')),
             comment: {
                 text:"",
-                user_id: "",
+                userId: "",
                 postId: "",
-            },
-            post: {
-                userId: parseInt(localStorage.getItem('userId')),
-                id: "",
-                content:"",
-                image:"",
-                comments:[],
             },
             token: localStorage.getItem('GPMANIA_token'),
         }    
     },
     methods: {
         sendComment() {
-            const id = this.post
-            console.log(id);
             const newComment = {
                 text: this.comment.text,
-                user_id: this.userId, // id utilisateur connecter,
-                postId: this.id,
+                userId: this.userId, // id utilisateur connecter,
+                postId: this.post.id,
             } 
-            console.log(newComment)
-            if (this.comment.text != null) { 
+            
+            if (this.comment.text != null && newComment.postId) { 
                 axios.post("http://localhost:3000/api/comment/newCmt", newComment, {
                     headers : {
                     'Content-Type': 'application/json',

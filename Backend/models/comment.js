@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
         // define association here
         models.comment.belongsTo(models.user, {
-            foreignKey: 'user_id'        
+            foreignKey: 'userId'        
         })
         models.comment.belongsTo(models.post, {
             foreignKey: 'postId'
@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
     };
     Comment.init({    
         text: DataTypes.STRING,
-        user_id: DataTypes.INTEGER,
+        userId: DataTypes.INTEGER,
         postId: DataTypes.INTEGER,
         deleted_at: DataTypes.DATE,
     }, {

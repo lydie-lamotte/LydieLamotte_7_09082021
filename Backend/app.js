@@ -5,8 +5,6 @@ const bodyParser = require('body-parser');
 const userRoutes = require('./routes/user');
 const postRoutes = require('./routes/post');
 const commentRoutes = require('./routes/comment')
-const { Sequelize } = require('sequelize');
-const mysql = require('mysql2');
 const helmet = require('helmet');
 const path = require('path');
 
@@ -20,27 +18,6 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
     next();
 });
-
-//DB
-const sequelize = new Sequelize({
-
-    host: 'DB_HOST', 
-    user: 'DB_USER', 
-    password: 'DB_PASSWORD',
-    database: 'DB_DATABASE',
-    dialect: "mysql"
-
-});
-const db = {};
-try {
-  db;
-  console.log('Vous êtes connecté à MySQL!');
-} catch (error) {
-  console.error('Impossible de se connecter, erreur suivante :', error);
-}
-
-db.Sequelize = Sequelize;
-db.sequelize = sequelize;
 
 //SECURITE
 app.use(bodyParser.json());

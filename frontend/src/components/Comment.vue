@@ -7,7 +7,7 @@
             </div>
             <div class="comment-text">
                 <p class="text">{{ comment.text }}</p> 
-                <button class="deleteCmt" type="submit" v-if="userId == comment.user_id" @click="deleteCom"><fa icon="trash-alt"/></button> 
+                <button class="deleteCmt" type="submit" v-if="userId == comment.userId" @click="deleteCom"><fa icon="trash-alt"/></button> 
             </div>
         </div>    
     </div> 
@@ -29,7 +29,7 @@ export default {
             comments:[],
             comment: {
                 text:"",
-                user_id:"",
+                userId:"",
                 postId:"",
             }
         }
@@ -55,7 +55,7 @@ export default {
             return date            
         },
            deleteCom() {
-            const id = this.user_id;
+            const id = this.userId;
             const isAdmin = 1 ;
             if (id == id || isAdmin == 1) {
             axios.delete('http://localhost:3000/api/post/deleteCmt/' + id, {

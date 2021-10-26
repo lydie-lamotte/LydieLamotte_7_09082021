@@ -6,12 +6,12 @@ const User = db.user;
 //Créer un commentaire
 exports.createComment = (req, res, next) => {
     const postId = req.body.postId;
-    const user_id = req.body.user_id;
+    const userId = req.body.userId;
     if (req.body.text == null) {
         res.status(400).json({message:'Contenu obligatoire'});
     }    
     const comment =  {
-        user_id: user_id,
+        userId: userId,
         postId: postId,
         text: req.body.text
     };
