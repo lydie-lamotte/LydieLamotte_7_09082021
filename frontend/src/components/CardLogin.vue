@@ -1,14 +1,14 @@
 <template>
     <div class=card>
         <h1>Connexion</h1>
-        <form id="form" @submit.prevent="false" novalidate="true">
+        <form id="form"  @submit.prevent="handleSubmit" novalidate="true">
             <label for="email">
                 <input id="email" v-model="email" type="email" name="email" placeholder="Entrez votre email" aria-label="email" required>
             </label> 
             <label for="password">
                 <input id="password" v-model="password" type="password" name="password" placeholder="Entrez votre mot de passe" aria-label="mot de passe" required>
             </label>
-            <button id="btnLogin" type="submit" @click="logUser">Connexion</button>                     
+            <button id="btnLogin" type="submit">Connexion</button>                     
         </form>
         <div class="link">
             <p>Vous n'avez pas de compte?</p>
@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import { mapState, mapActions } from 'vuex'
 
 export default {
     name: "CardLogin",
@@ -28,24 +28,28 @@ export default {
             password:"",
         }
     },
-    methods: {    
-        logUser() {
-            const userLogin = {
-                    email: this.email,
-                    password: this.password,
-            }
-            if (this.email != "" && this.password != "") {
-                axios.post('http://localhost:3000/api/auth/login',userLogin) 
-                .then((response)=> { console.log(response)
-                    let user = response.data.user
-                    let userId = response.data.user.userId
-                    localStorage.setItem('GPMANIA_token',response.data.token);
-                    localStorage.setItem('GPMANIA_user',JSON.stringify(user));
-                    localStorage.setItem('userId',userId);
-                    this.$router.push('/Home');
+    computed: {
+        ...mapState({
+            user: state => state.user,
+            isLoggedIn:state=>state.isLoggedIn
+        })
+    },
+    created() {
+        //    verify user login
+    },
+    methods: {   
+        ...mapActions('users', ['login', 'logout']), 
+        handleSubmit() {
+            this.submitted = true;
+            const { email, password } = this;
+             if (email && password) {
+                this.login({ email, password })
+                .then(()=>{
+                   this.$router.push("/Home")
                 })
-                .catch((error) => {console.log(error)}) 
-            } 
+            }
+            
+            
         }    
     },
 }

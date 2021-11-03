@@ -52,13 +52,14 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 textarea {
     width: 70%;
     height: 40px;
     border-radius: 10px;
     font-size: 1.7em;
     margin-bottom: 20px;
+    margin-left: 20px;
 }
 .send {
     color: green;

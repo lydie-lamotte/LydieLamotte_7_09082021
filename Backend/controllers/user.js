@@ -37,9 +37,10 @@ exports.signup = (req, res, next) => {
 }
 
 //se connecter
-exports.login = (req, res, next) => {
+exports.login = (req, res, next) => { 
     //vérifie que les champs ne soient pas vide
-    if (req.body.email == null || req.body.password == null) {
+    
+    if (!req.body.email || !req.body.password) {
         res.status(400).json({message: 'Merci de renseigner tous les champs'});
     }
     User.findOne({
@@ -54,7 +55,7 @@ exports.login = (req, res, next) => {
             if (!valid) {
                 return res.status(401).json({ error: 'Mot de passe incorrect !' });
             }
-            console.log(user);
+            //console.log(user);
             res.status(200).json({
                user:{
                     firstName: user.firstName,

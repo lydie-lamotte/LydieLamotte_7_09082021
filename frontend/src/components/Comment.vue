@@ -1,8 +1,8 @@
 <template>
-    <div class="comments" >
-        <div v-for="comment in comments" v-bind:key="comment.id">
+    <div>
+        <div id="comments" v-for="comment in comments" v-bind:key="comment.id">
             <div class="info-user">
-                <p class="user-comment"> {{comment.user.lastName}} {{comment.user.firstName}} </p>
+                <p class="user-comment"> {{comment.lastName}} {{comment.firstName}} </p>
                 <p class="comment-date">commenté le {{ getDate(comment.updatedAt) }}</p>
             </div>
             <div class="comment-text">
@@ -15,9 +15,12 @@
 
 <script>
 import axios from "axios";
+import store from "../store";
+import {mapActions} from "vuex";
 
 export default {
     name:"Comment",
+    store: store,
     data() {
         return {
             userId: localStorage.getItem('userId'),
@@ -26,15 +29,16 @@ export default {
                 lastName:"",
                 firstName:"",
             },
-            comments:[],
             comment: {
                 text:"",
                 userId:"",
                 postId:"",
-            }
+                updatedAt:null,
+            },
+            comments: [],           
         }
     },
-    mounted() {
+    created() {
         axios.get("http://localhost:3000/api/comment", {
             headers : {
                 'Content-Type': 'application/json',
@@ -50,6 +54,8 @@ export default {
         .catch((error) => {error});
     },
     methods: {
+        ...mapActions(["setComments"]),
+  
         getDate(datetime) {
             let date = new Date(datetime).toLocaleString()
             return date            
@@ -76,8 +82,8 @@ export default {
 </script>
 
 <style scoped>
-.comments {
-    background-color: rgb(247, 241, 232);
+#comments {
+    background-color: rgba(252, 250, 250, 0.918);
     border-radius: 20px;
     width: 80%;
     margin: auto;

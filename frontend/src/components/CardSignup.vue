@@ -1,7 +1,7 @@
 <template>
     <div class=card>
         <h1>Inscription</h1>
-        <form id="form" action="" method="post"  novalidate="true">
+        <form id="form" @submit.prevent="handleSubmit" novalidate="true">
 
             <label for="lastName">
                 <input id="lastName" v-model="lastName" type="text" name="lastName" placeholder="Entrez votre nom" aria-label="nom" required>
@@ -19,7 +19,7 @@
                 <input id="password" v-model="password" type="password" name="password" placeholder="Entrez votre mot de passe" aria-label="mot de passe" required>
             </label> 
         
-            <button id="btnLogin" type="submit" @click="createUser">Connexion</button>                     
+            <button id="btnLogin" type="submit">Connexion</button>                     
         </form>
         <div class="link">
             <p>Vous avez déjà un compte?</p>
@@ -29,42 +29,38 @@
 </template>
 
 <script>
-import axios from "axios";
+//import axios from "axios";
+import { mapState, mapActions } from 'vuex'
 
 export default {
     name: "CardSignup",
     data() {
         return {
+           
             firstName: "",
             lastName:"",
             email:"",
             password:"",
+            submitted: false
         }
     },
+    computed: {
+         ...mapState({
+            user: state => state.user,
+        }),
+    },
     methods: {
-        createUser() {
+        ...mapActions('users', ['signup']),
+        handleSubmit() {
+            this.submitted = true;
             const validEmail = /^[a-zA-Z0-9-_.]+[@]{1}[a-zA-Z0-9-_.]+[.]{1}[a-z]{2,10}$/;
             const validPassword = /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{8,200})/;
-            const firstName = this.firstName;
-            const lastName = this.lastName;
-            if ((this.firstName != "" && this.lastName != "" && this.email != "" && this.password != "") && (validPassword.test(this.password) && validEmail.test(this.email)) ){
-                const user = {
-                    firstName: this.firstName,
-                    lastName: this.lastName,
-                    email: this.email,
-                    password: this.password
-                }
-                axios.post('http://localhost:3000/api/auth/signup', user) 
-                .then(response => { console.log(response)
-                    localStorage.setItem('firstName',firstName);
-                    localStorage.setItem('lastName',lastName);
-                    alert('Votre compte est bien créé');
-                    this.$router.push("/")
-                })
-                .catch((error) => {console.log(error)}) 
-            } else {
-                alert('Merci de compléter correctement tous les champs')
-            }
+            if ((this.firstName != "" && this.lastName != "" && this.email != "" && this.password != "") && (validPassword.test(this.password)) && (validEmail.test(this.email))) {
+                const { firstName, lastName, email, password } = this;
+                this.signup({firstName, lastName, email, password});
+                alert('votre compte est créé!') 
+                this.$router.push("/")
+            }            
         }
     },
 }

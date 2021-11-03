@@ -97,9 +97,8 @@ export default {
         },
         like() {
             const id = this.post.id
-            const usersLikes = this.post.usersLikes
-            console.log(this.post.usersLikes)
-            axios.post("http://localhost:3000/api/post"+ id +"/like", usersLikes, {
+            
+            axios.post("http://localhost:3000/api/post"+ id +"/like", {
                 headers : {
                     'Content-Type': 'application/json',
                     Authorization : "Bearer: " + this.token
