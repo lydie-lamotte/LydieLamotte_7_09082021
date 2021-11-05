@@ -3,21 +3,21 @@
         <div class="profil">
             <p class="user-name">Bonjour {{firstName}} {{lastName}}</p>           
         </div> 
-        <label for="content">
-            <textarea v-model="content" id="content" type="text" placeholder="Quoi de neuf?" required></textarea>
-        </label>  
-
-        <form>
+        <form @submit.prevent="createPost" novalidate="true">
+            <label for="content">
+                <textarea v-model="content" id="content" type="text" placeholder="Quoi de neuf?" required></textarea>
+            </label>  
+        
             <label for="image">
                 <input type="file" name="image" @change="onFileSelected" id="image" required>
             </label>
-            <button type="submit" @click.prevent="addNewPost">Envoyer</button>
+            <button type="submit">Envoyer</button>
         </form>      
     </div>    
 </template>
 
 <script>
-import axios from 'axios';
+import { mapState, mapActions } from 'vuex'
 
 export default {
     name: 'CreatePost',
@@ -30,37 +30,33 @@ export default {
             content:"",
             image: null,
             userId: user.userId,
+            submitted: false
         }
     },
+    computed: {
+         ...mapState({
+            post: state => state.post,
+        }),
+    },
     methods: {
+        ...mapActions('posts', ['addNewPost']),
         onFileSelected(event) {
             console.log(event)
             this.image = event.target.files[0] || event.dataTransfer.files        
         },
-        addNewPost() {
-            const formData = new FormData();
+        createPost() {
+            this.submitted = true;
+            const formData = new FormData()
             if (this.image != null && this.content != null) {
                 formData.append('content', this.content);
                 formData.append('image', this.image);
                 formData.append('userId', this.userId);
-                axios.post('http://localhost:3000/api/post/newPost', formData,
-                {
-                headers:{
-                "Content-Type": "multipart/form-data",
-                Authorization: 'Bearer ' + localStorage.getItem('GPMANIA_token')
-                }
-                })
-            
-                .then((response) => { 
-                    console.log(formData)
-                    console.log(response);
-                    alert('votre post est créé!')
-                    window.location.reload()
-                })
-                .catch((error) => {console.log(error)}) 
-            } 
-        }                    
-    }, 
+                this.addNewPost( formData )  
+                alert('votre post est créé!')
+                window.location.reload() 
+            }  
+        }                        
+    }
 }
 </script>
 

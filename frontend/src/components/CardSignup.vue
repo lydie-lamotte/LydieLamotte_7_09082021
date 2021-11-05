@@ -18,7 +18,9 @@
             <label for="password">
                 <input id="password" v-model="password" type="password" name="password" placeholder="Entrez votre mot de passe" aria-label="mot de passe" required>
             </label> 
-        
+
+            <p id="error-valid">{{ error }}</p>
+
             <button id="btnLogin" type="submit">Connexion</button>                     
         </form>
         <div class="link">
@@ -41,6 +43,7 @@ export default {
             lastName:"",
             email:"",
             password:"",
+            error:"",
             submitted: false
         }
     },
@@ -55,12 +58,21 @@ export default {
             this.submitted = true;
             const validEmail = /^[a-zA-Z0-9-_.]+[@]{1}[a-zA-Z0-9-_.]+[.]{1}[a-z]{2,10}$/;
             const validPassword = /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{8,200})/;
-            if ((this.firstName != "" && this.lastName != "" && this.email != "" && this.password != "") && (validPassword.test(this.password)) && (validEmail.test(this.email))) {
-                const { firstName, lastName, email, password } = this;
-                this.signup({firstName, lastName, email, password});
-                alert('votre compte est créé!') 
-                this.$router.push("/")
-            }            
+            if (this.firstName == "" || this.lastName == "" || this.email == "" || this.password == "") {
+                this.error = "Tous les champs doivent être renseignés."
+            }
+            else if (!validEmail.test(this.email)) {
+                this.error = "L'email n'est pas valide."
+            }
+            else if (!validPassword.test(this.password)) {
+                this.error = "Le mot de passe n'est pas valide."
+            }
+            else {    
+            const { firstName, lastName, email, password } = this;
+            this.signup({firstName, lastName, email, password});
+            alert('votre compte est créé!') 
+            this.$router.push("/")
+            }           
         }
     },
 }
@@ -85,6 +97,10 @@ input {
     height: 40px;
     margin-bottom: 20px;
     box-shadow: 1px 10px 5px rgba(0,0,0,0.2);
+}
+#error-valid {
+    color: red;
+    font-size: 0.8em;
 }
 #btnLogin {
     width: 30%;

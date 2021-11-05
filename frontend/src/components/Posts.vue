@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import { mapState, mapActions, mapGetters } from 'vuex'
 import CreateComment from "@/components/CreateComment";
 import Comment from "@/components/Comment";
 
@@ -34,12 +34,12 @@ export default {
        CreateComment,
        Comment
         
-    },
+    }, 
     data() {
+        const user = JSON.parse(localStorage.getItem('GPMANIA_user'));
         return {
             media_url: null,
-            posts: [],
-            loading:true,
+            loading: true,
             user: {
                 firstName:"",
                 lastname: "",
@@ -62,31 +62,26 @@ export default {
                 updatedAt: null,           
             },
             token: localStorage.getItem('GPMANIA_token'),
-            userId: localStorage.getItem('userId'),
-            commentText: {
-                text: "",
-            },
+            userId: user.userId,
         }
     },
-    created() {
-        axios.get("http://localhost:3000/api/post", {
-            headers : {
-                'Content-Type': 'application/json',
-                Authorization : "Bearer: " + this.token
-            }
-        })
-        .then((response) => {            
-            let data = response.data
-            const {media_url,posts} = data
-            console.log({media_url,posts});
-            this.posts = posts
-            this.media_url = media_url
-            this.loading = false
-        })
-        .catch((error) => {error});
-        
+     computed: {
+        ...mapState({
+            posts: state => state.posts,
+        }),
+        ...mapGetters(["posts"]),
+
     },
+    created() {
+        this.loadPosts()
+        .then(() =>{
+            console.log(this.posts)
+        })
+    },
+
     methods: {
+        ...mapActions('posts', ['loadPosts']),
+        
         getPictureUrl(imageUrl){
             console.log(this.media_url)
             return `${this.media_url}${imageUrl} `
@@ -95,7 +90,8 @@ export default {
             let date = new Date(datetime).toLocaleString()
             return date            
         },
-        like() {
+
+        /*like() {
             const id = this.post.id
             
             axios.post("http://localhost:3000/api/post"+ id +"/like", {
@@ -121,7 +117,7 @@ export default {
                 window.location.reload();
             }
             }
-        }     
+        } */    
     }    
 }
 </script>

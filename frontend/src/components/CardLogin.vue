@@ -8,6 +8,7 @@
             <label for="password">
                 <input id="password" v-model="password" type="password" name="password" placeholder="Entrez votre mot de passe" aria-label="mot de passe" required>
             </label>
+            <p id="error-valid">{{ error }}</p>
             <button id="btnLogin" type="submit">Connexion</button>                     
         </form>
         <div class="link">
@@ -26,6 +27,7 @@ export default {
         return {
             email:"",
             password:"",
+            error:""
         }
     },
     computed: {
@@ -34,22 +36,20 @@ export default {
             isLoggedIn:state=>state.isLoggedIn
         })
     },
-    created() {
-        //    verify user login
-    },
     methods: {   
         ...mapActions('users', ['login', 'logout']), 
         handleSubmit() {
             this.submitted = true;
             const { email, password } = this;
-             if (email && password) {
+            if (this.email == "" || this.password == "") {
+                this.error = "Tous les champs doivent être renseignés."
+            }
+            else if (email && password) {
                 this.login({ email, password })
                 .then(()=>{
                    this.$router.push("/Home")
                 })
             }
-            
-            
         }    
     },
 }
@@ -74,6 +74,10 @@ input {
     height: 40px;
     margin-bottom: 20px;
     box-shadow: 1px 10px 5px rgba(0,0,0,0.2);
+}
+#error-valid {
+    color: red;
+    font-size: 0.8em;
 }
 #btnLogin {
     width: 30%;

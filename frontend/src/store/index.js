@@ -1,6 +1,7 @@
 import { createStore } from 'vuex'
 
 import {users} from "./user.store"
+import {posts} from "./posts.store"
 
 // const state = {
 //   users: [{
@@ -41,6 +42,7 @@ import {users} from "./user.store"
 
 export default createStore({
   modules: {
-    users
+    users,
+    posts
   }
 })
