@@ -23,7 +23,7 @@ function getAllPosts() {
     return axios.get(`${apiUrl}/post`,{
         headers: authHeader()
     })
-    //.then((data)=>console.log(data.data))
+    .then(({data})=>{return data})
     
 }
 

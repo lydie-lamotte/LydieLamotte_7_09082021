@@ -38,7 +38,6 @@ export default {
     data() {
         const user = JSON.parse(localStorage.getItem('GPMANIA_user'));
         return {
-            media_url: null,
             loading: true,
             user: {
                 firstName:"",
@@ -65,23 +64,18 @@ export default {
             userId: user.userId,
         }
     },
-     computed: {
-        ...mapState({
+    computed: {
+        ...mapState([{
             posts: state => state.posts,
-        }),
-        ...mapGetters(["posts"]),
-
+        }]),
+        ...mapGetters('posts',['posts'])
+        
     },
-    created() {
-        this.loadPosts()
-        .then(() =>{
-            console.log(this.posts)
-        })
+    mounted(){
+        this.getAll() ;
     },
-
     methods: {
         ...mapActions('posts', ['loadPosts']),
-        
         getPictureUrl(imageUrl){
             console.log(this.media_url)
             return `${this.media_url}${imageUrl} `
@@ -90,6 +84,11 @@ export default {
             let date = new Date(datetime).toLocaleString()
             return date            
         },
+        async getAll(){
+            this.loadPosts().then(()=>{
+                this.loading = false ; // all post is loading and state is change
+            }) ;
+        }
 
         /*like() {
             const id = this.post.id

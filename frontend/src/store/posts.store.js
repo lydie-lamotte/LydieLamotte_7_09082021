@@ -1,12 +1,12 @@
 import { postService } from "../services/posts.service";
 
-const state = {
+const initialState = {
     post: {},
     posts:[]
 };
 const getters = {
-    posts () {
-        return state.posts
+    posts (state) {
+        return (typeof state.posts =="string") ? JSON.parse(state.posts) : []
     },
 }
 const actions = {
@@ -17,12 +17,11 @@ const actions = {
                 return Promise.resolve()
             })
     },
-    loadPosts({ commit }, posts) {
+    loadPosts({ commit }) {
         return postService.getAllPosts(posts)
-        .then ( ({data}) => {
-            console.log(data);
+        .then ( data => {
             commit('getPosts', data.posts);
-            return Promise.resolve()
+            return Promise.resolve() // return promise
         })
     },    
     deletePost ({ commit }, id) {
@@ -40,7 +39,7 @@ const mutations = {
         state.post = post;
     },
     getPosts(state,posts){
-        state.posts = posts
+        state.posts = JSON.stringify(posts)
     },
     deleteSuccess(state, id) {
         state.posts.id = state.posts.id.filter(post => post.id !== id)
@@ -51,7 +50,7 @@ const mutations = {
 
 export const posts = {
     namespaced: true,
-    state,
+    state:initialState,
     getters,
     actions,
     mutations

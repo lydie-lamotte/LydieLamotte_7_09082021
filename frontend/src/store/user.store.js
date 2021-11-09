@@ -47,7 +47,7 @@ const mutations = {
 
 export const users = {
     namespaced: true,
-    initiateState,
+    state:initiateState,
     actions,
     mutations
 };
