@@ -2,7 +2,7 @@
    <div>
        <h3 v-if=loading>Loading ...</h3>
        <div v-else>
-           <div id="posts" v-for="p in posts" :key="p.id">
+           <div class="posts" v-for="p in posts" :key="p.id">
                 <div class="info-user">
                     <p class="user-name"> {{ p.user.lastName }} {{p.user.firstName}}</p>
                     <p class="post-date">publié le {{ getDate(p.updatedAt)}}</p>
@@ -13,21 +13,21 @@
                 <div class="button">
                     <button class="like" @click="like"><fa icon="thumbs-up"/></button>
                     <p class="number-like">{{ p.usersLikes }} j'aime</p>
-                    <button class="delete" type="submit" v-if="userId == p.userId" @click="deletePost"><fa icon="trash-alt"/></button> 
+                    <button class="delete" type="submit" v-if="userId == p.userId" @click="postDelete()"><fa icon="trash-alt"/></button> 
                 </div>
-                <CreateComment  :post="p" />
-                <Comment />          
+                <CreateComment  :post="p" />    
+                <Comment :comments ="p.comments" :postId="p.id" />          
             </div>
        </div>
    </div>  
 </template>
 
 <script>
-import { mapState, mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 import CreateComment from "@/components/CreateComment";
 import Comment from "@/components/Comment";
 
-
+const media_url = "http://localhost:3000";
 export default {
     name: "Posts",
     components: {
@@ -38,7 +38,6 @@ export default {
     data() {
         const user = JSON.parse(localStorage.getItem('GPMANIA_user'));
         return {
-            media_url: null,
             loading: true,
             user: {
                 firstName:"",
@@ -65,65 +64,54 @@ export default {
             userId: user.userId,
         }
     },
-     computed: {
-        ...mapState({
+    computed: {
+        ...mapState([{
             posts: state => state.posts,
-        }),
-        ...mapGetters(["posts"]),
-
+        }]),
+        ...mapGetters('posts', ['posts']),
     },
-    created() {
-        this.loadPosts()
-        .then(() =>{
-            console.log(this.posts)
-        })
+    mounted() {
+        this.getAll() 
     },
-
     methods: {
-        ...mapActions('posts', ['loadPosts']),
+        ...mapActions('posts', ['loadPosts','deletePost','likePost']),
         
         getPictureUrl(imageUrl){
-            console.log(this.media_url)
-            return `${this.media_url}${imageUrl} `
-        },
+            return `${media_url}${imageUrl} `
+        },       
         getDate(datetime) {
             let date = new Date(datetime).toLocaleString()
             return date            
         },
-
-        /*like() {
-            const id = this.post.id
+        async getAll(){
+            this.loadPosts()
+                .then(() => {
+                    this.loading = false
+                })
             
-            axios.post("http://localhost:3000/api/post"+ id +"/like", {
-                headers : {
-                    'Content-Type': 'application/json',
-                    Authorization : "Bearer: " + this.token
-                }
-            })
-            .then(res => console.log(res));
         },
-        deletePost() {            
-            const id = this.userId;
+        like() {
+            const id = this.post.id
+            this.likePost(id)  
+        },
+        postDelete() {           
+            const userId = this.userId;
             const isAdmin = 1 ;
-            if (id == id || isAdmin == 1) {
-            axios.delete('http://localhost:3000/api/post/deletePost/' + id, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: "Bearer " + this.token
+            if (userId == this.user.id || isAdmin == 1) {
+                const id = this.post.id
+                this.deletePost(id)
+                const response = confirm(" Voulez vous supprimer ce post?")
+                if (response) {
+                    window.location.reload();
                 }
-            })
-            const response = confirm(" Voulez vous supprimer ce post?");
-            if (response) {
-                window.location.reload();
             }
-            }
-        } */    
-    }    
+        }    
+    }   
 }
 </script>
 
 <style scoped>
-#posts {
+.posts {
     background-color: rgba(245, 226, 226, 1);
     margin-top: 50px;
     width: 80%;
@@ -185,21 +173,10 @@ img {
 .delete:hover {
     opacity: 1;
 }
-.deleteCmt {
-    border: none;
-    background-color:rgb(247, 241, 232);
-    font-size: 1.2em;
-    cursor: pointer;
-    opacity: 0.5;
-    margin-right: 30px;
-}
-.deleteCmt:hover {
-    opacity: 1;
-}
 /* media queries*/
 /*portable*/
 @media screen and (max-width: 550px) { 
-    #posts {
+    .posts {
         width: 100%;
     }
     img {
@@ -212,8 +189,8 @@ img {
 }      
 /*tablette*/
 @media screen and (max-width: 950px) and (min-width: 551px){
-    #posts {
-        width: 80%;
+    .posts {
+        width: 90%;
     }
     img {
         width: 70%;

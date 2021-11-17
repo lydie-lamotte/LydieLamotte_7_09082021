@@ -23,7 +23,7 @@ exports.createComment = (req, res, next) => {
 //Récupérer les commentaires
 exports.findAllComment = (req, res, next) => {
     Comment.findAll({
-        include: [{model: User, Post}],
+        include: [{model: User},{model: Post}],
         order: [['updatedAt','DESC']],
         where: {deleted_at: null}
     })

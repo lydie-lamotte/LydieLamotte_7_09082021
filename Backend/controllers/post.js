@@ -31,7 +31,7 @@ exports.createPost = (req, res, next) => {
 //Récupérer les posts
 exports.findAllPost = (req, res, next) => {
     Post.findAll({
-        include: [{model: User, Comment}],
+        include: [{model: User},{model: Comment, include: [{model: User}] }],
         order: [['updatedAt','DESC']],
         where: { deleted_at: null },
     })

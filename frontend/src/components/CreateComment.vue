@@ -1,14 +1,14 @@
 <template>
     <form @submit.prevent="sendComment()">
         <div class="comment">
-            <textarea v-model="comment.text" id="text" type="text" placeholder="Commenter..."></textarea>
+            <textarea v-model="text" id="text" type="text" placeholder="Commenter..."></textarea>
             <button class="send" type="submit" ><fa icon="arrow-alt-circle-right"/></button>
         </div>
     </form>
 </template>
 
 <script>
-import axios from "axios";
+import { mapState, mapActions } from 'vuex'
 
 export default {
     name: "CreateComment",
@@ -16,36 +16,34 @@ export default {
         post: Object
     },
     data() {
+        const user = JSON.parse(localStorage.getItem('GPMANIA_user'));
         return { 
-            userId: parseInt(localStorage.getItem('userId')),
-            comment: {
-                text:"",
-                userId: "",
-                postId: "",
-            },
+            userId: user.userId,
+            text:"",
+            postId: "",
             token: localStorage.getItem('GPMANIA_token'),
+            submitted: false
         }    
     },
+    computed: {
+        ...mapState({
+            comment: state => state.comment,
+        }),
+    },
     methods: {
+        ...mapActions('comments', ['addNewComment']),
         sendComment() {
+            this.submitted = true;
             const newComment = {
-                text: this.comment.text,
+                text: this.text,
                 userId: this.userId, // id utilisateur connecter,
                 postId: this.post.id,
-            } 
-            
-            if (this.comment.text != null && newComment.postId) { 
-                axios.post("http://localhost:3000/api/comment/newCmt", newComment, {
-                    headers : {
-                    'Content-Type': 'application/json',
-                    Authorization : "Bearer: " + this.token
-                    }   
-                })
-                .then((response)=> { console.log(response)
-                    alert('votre commentaire est créé!')
-                    window.location.reload()
-                })
-                .catch((error) => {console.log(error)})  
+            }            
+            if (this.text != null && newComment.postId) { 
+                this.addNewComment(newComment)  
+                console.log(newComment)
+                alert('votre commentaire est créé!')
+                window.location.reload()
             }
         },
     }
@@ -78,4 +76,5 @@ textarea {
     align-items: flex-start;
     justify-content: space-evenly;
 }
+
 </style>

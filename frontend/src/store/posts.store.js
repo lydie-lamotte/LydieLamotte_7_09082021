@@ -1,12 +1,12 @@
 import { postService } from "../services/posts.service";
 
-const state = {
+const initialState = {
     post: {},
-    posts:[]
+    posts:[],
 };
 const getters = {
-    posts () {
-        return state.posts
+    posts (state) {
+        return (typeof state.posts =="string") ? JSON.parse(state.posts) : []
     },
 }
 const actions = {
@@ -19,17 +19,23 @@ const actions = {
     },
     loadPosts({ commit }, posts) {
         return postService.getAllPosts(posts)
-        .then ( ({data}) => {
+        .then ( data => {
             console.log(data);
-            commit('getPosts', data.posts);
+            commit('getPosts', data.posts)
             return Promise.resolve()
         })
     },    
     deletePost ({ commit }, id) {
-        return postService.deletePost(id) 
+        return postService.deleteOnePost(id) 
         .then (post => {
-            console.log(post);
-            commit('deleteSuccess', id)
+            commit('deleteSuccess', post)
+            return Promise.resolve()
+        })
+    },
+    likePost ({commit}, post) {
+        return postService.likePost(post)
+        .then (post => {
+            commit('likePost', post)
             return Promise.resolve()
         })
     }
@@ -40,10 +46,21 @@ const mutations = {
         state.post = post;
     },
     getPosts(state,posts){
-        state.posts = posts
+        state.posts = JSON.stringify(posts)
     },
-    deleteSuccess(state, id) {
-        state.posts.id = state.posts.id.filter(post => post.id !== id)
+    reFreshPost (state,postId,newPost){
+        state.posts.map(post=>{
+            if(post.id==postId){
+                post = newPost
+            }
+        }) 
+    },
+    deleteSuccess(state, postId) {
+        let posts = state.posts.filter(post => post.id != postId)
+        state.posts= posts
+    },
+    likeSuccess(state,post) {
+        state.post = post
     }
 }
 
@@ -51,7 +68,7 @@ const mutations = {
 
 export const posts = {
     namespaced: true,
-    state,
+    initialState,
     getters,
     actions,
     mutations

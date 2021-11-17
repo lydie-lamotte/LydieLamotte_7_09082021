@@ -1,7 +1,7 @@
-import axios from 'axios'
-import { authHeader } from '../helpers/_auth-header.helper'
+import axios from 'axios';
+import { authHeader } from '../helpers/_auth-header.helper';
 
-const apiUrl = "http://localhost:3000/api"
+const apiUrl = "http://localhost:3000/api";
 
 // creation post
 function addNewPost(post) {
@@ -12,7 +12,7 @@ function addNewPost(post) {
 }
 
 // suppression post
-function deletePost(id) {
+function deleteOnePost(id) {
     return axios.delete(`${apiUrl}/post/deletePost/`+ id, {
         headers: authHeader()
     })
@@ -22,13 +22,21 @@ function deletePost(id) {
 function getAllPosts() {
     return axios.get(`${apiUrl}/post`,{
         headers: authHeader()
+    }) 
+    .then(({data})=>{return data})   
+}
+
+//like un post
+function likePost(id,option) {
+    return axios.post(`${apiUrl}/post/`+ id +`/like`, option, {
+        headers: authHeader()
     })
-    //.then((data)=>console.log(data.data))
-    
+    .then((response) => console.log(response))
 }
 
 export  const postService = {
     addNewPost,
-    deletePost,
-    getAllPosts
+    deleteOnePost,
+    getAllPosts,
+    likePost
 }
