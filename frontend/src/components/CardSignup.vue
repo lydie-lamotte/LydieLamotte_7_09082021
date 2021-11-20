@@ -53,16 +53,20 @@ export default {
     },
     methods: {
         ...mapActions('users', ['signup']),
+        // s'inscrire
         handleSubmit() {
             this.submitted = true;
             const validEmail = /^[a-zA-Z0-9-_.]+[@]{1}[a-zA-Z0-9-_.]+[.]{1}[a-z]{2,10}$/;
             const validPassword = /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{8,200})/;
+            // vérification des champs
             if (this.firstName == "" || this.lastName == "" || this.email == "" || this.password == "") {
                 this.error = "Tous les champs doivent être renseignés."
             }
+            // vérification format de l'email
             else if (!validEmail.test(this.email)) {
                 this.error = "L'email n'est pas valide."
             }
+            // vérification format du password
             else if (!validPassword.test(this.password)) {
                 this.error = "Le mot de passe n'est pas valide."
             }

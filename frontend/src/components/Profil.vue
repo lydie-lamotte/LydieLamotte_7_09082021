@@ -23,27 +23,29 @@ export default {
             lastName: user.lastName,
             email: user.email, 
             token: localStorage.getItem('GPMANIA_token'),
-            userId: localStorage.getItem('userId')
+            userId: user.userId
         }
     },
     methods: {
+        // suppression du profil
         deleteProfil() {
             const id = this.userId;
             const isAdmin = 1 ;
             if(id == id || isAdmin == 1) {
-            axios.delete('http://localhost:3000/api/auth/delete/' + id, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: "Bearer " + this.token
+                const response = confirm(" Voulez vous supprimer votre profil?");
+                if (response) {
+                    axios.delete('http://localhost:3000/api/auth/delete/' + id, {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization: "Bearer " + this.token
+                        }
+                    })
+                    localStorage.clear();
+                    this.$router.push('/');
                 }
-            })
-            const response = confirm(" Voulez vous supprimer votre profil?");
-            if (response) {
-                localStorage.clear();
-                this.$router.push('/');
-            }
             }
         },
+        // lien vers la modification
         updateProfil() {
             this.$router.push('/UpdatedProfil');
         }

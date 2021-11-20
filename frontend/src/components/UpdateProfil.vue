@@ -42,9 +42,11 @@ export default {
         }
     },
     methods: {
+        //lien retour vers le profil
         returnProfil() {
             this.$router.push('/MonProfil');
         },
+        // modification du profil
         modifyProfil() {
             const id = this.id
             const user = {

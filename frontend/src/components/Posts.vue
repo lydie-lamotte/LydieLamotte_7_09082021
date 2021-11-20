@@ -5,15 +5,15 @@
            <div class="posts" v-for="p in posts" :key="p.id">
                 <div class="info-user">
                     <p class="user-name"> {{ p.user.lastName }} {{p.user.firstName}}</p>
-                    <p class="post-date">publié le {{ getDate(p.updatedAt)}}</p>
+                    <p class="post-date">publié le {{ getDate(p.createdAt)}}</p>
                 </div>
                 <br>
                 <img id="image-post" :src="getPictureUrl(p.image)">
                 <p class="content">{{ p.content }}</p>
                 <div class="button">
-                    <button class="like" @click="like(p)"><fa icon="thumbs-up"/></button>
+                    <button class="like" title="j'aime" @click="like(p)"><fa icon="thumbs-up"/></button>
                     <p class="number-like">{{ (JSON.parse(p.usersLikes)).length }} j'aime</p>
-                    <button class="delete" type="submit" v-if="userId == p.userId || isAdmin == 1 " @click="postDelete(p.id)"><fa icon="trash-alt"/></button> 
+                    <button class="delete" type="submit" title="supprimer" v-if="userId == p.userId || isAdmin == 1 " @click="postDelete(p.id)"><fa icon="trash-alt"/></button> 
                 </div>
                 <CreateComment  :post="p" />    
                 <Comment :comments ="p.comments" :postId="p.id" />          
@@ -50,7 +50,7 @@ export default {
                 image:"",
                 usersLikes: [],
                 id:"",
-                updatedAt: null,
+                createdAt: null,
             },
             comments: [],
             comment: {
@@ -71,19 +71,22 @@ export default {
         }]),
         ...mapGetters('posts', ['posts']),
     },
+    // récupération des posts
     mounted() {
         this.getAll() 
     },
     methods: {
         ...mapActions('posts', ['loadPosts','deletePost','likePost']),
-        
+        // affichage de la photo
         getPictureUrl(imageUrl){
             return `${media_url}${imageUrl} `
-        },       
+        },
+        // format date       
         getDate(datetime) {
             let date = new Date(datetime).toLocaleString()
             return date            
         },
+        // récupération des posts asynchrone
         async getAll(){
             this.loadPosts()
                 .then(() => {
@@ -91,10 +94,12 @@ export default {
                 })
             
         },
+        // fonction pour vérifier si user a déjà liké
         userAlreadyLikeThatPost(userId,stringArrayLikes){
             let likes = JSON.parse(stringArrayLikes) ;
             return likes.includes(userId)
         },
+        // like ou pas de like selon l'option et la fonction 
         like(p) {
             console.log(this.userId)
             const alreadyLikes = this.userAlreadyLikeThatPost(this.userId,p.usersLikes)
@@ -103,6 +108,7 @@ export default {
             console.log(`user option body send ${option}`)
             this.likePost({id:p.id,option})   
         },
+        // suppression du post
         postDelete(id) {           
             const userId = this.userId;
             const isAdmin = 1 ;
@@ -110,8 +116,7 @@ export default {
             if (userId == postUserId || isAdmin == 1) {
                 const response = confirm(" Voulez vous supprimer ce post?")
                 if (response) {
-                    this.deletePost(id)
-                    window.location.reload()          
+                    this.deletePost(id)          
                 }
             }
         }    

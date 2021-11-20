@@ -6,6 +6,7 @@ const initiateState = {
 };
 
 const actions = {
+    //ajout commentaire
     addNewComment({ commit }, comment) {
         return commentService.addNewComment(comment)
             .then( comment=>{
@@ -13,6 +14,7 @@ const actions = {
                 return Promise.resolve()
             })
     }, 
+    // suppression commentaire
     deleteComment ({ commit }, id) {
         return commentService.deleteOneComment(id) 
         .then (comment => {

@@ -10,6 +10,7 @@ const getters = {
     },
 }
 const actions = {
+    // ajout post
     addNewPost({ commit }, post) {
         return postService.addNewPost(post)
             .then( post=>{
@@ -17,6 +18,7 @@ const actions = {
                 return Promise.resolve()
             })
     },
+    // récupération posts
     loadPosts({ commit }) {
         return postService.getAllPosts(posts)
         .then ( data => {
@@ -25,13 +27,19 @@ const actions = {
             return Promise.resolve()
         })
     },    
+    // suppression post
     deletePost ({ commit }, id) {
         return postService.deleteOnePost(id) 
-        .then (post => {
-            commit('deleteSuccess', post)
-            return Promise.resolve()
+        .then (() => {
+            return postService.getAllPosts(posts)
+            .then ( data => {
+                console.log(data);
+                commit('getPosts', data.posts)
+                return Promise.resolve()
+            })
         })
     },
+    // like post
     likePost ({commit}, {id,option}) {
         return postService.likePost(id,option)
         .then (() => {
@@ -51,10 +59,6 @@ const mutations = {
     },
     getPosts(state,posts){
         state.posts = JSON.stringify(posts)
-    },
-    deleteSuccess(state, postId) {
-        let posts = state.posts.filter(post => post.id != postId)
-        state.posts= posts
     },
 }
 

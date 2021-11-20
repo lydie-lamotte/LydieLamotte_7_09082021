@@ -38,10 +38,11 @@ export default {
     },
     methods: {   
         ...mapActions('users', ['login', 'logout']), 
+        // login
         handleSubmit() {
             this.submitted = true;
             const { email, password } = this;
-            if (this.email == "" || this.password == "") {
+            if (this.email == "" || this.password == "") { //vérifie que les champs ne soient pas vide
                 this.error = "Tous les champs doivent être renseignés."
             }
             else if (email && password) {

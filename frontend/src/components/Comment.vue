@@ -3,18 +3,18 @@
         <div id="comments" v-for="comment in comments" :key="comment.id">
             <div class="info-user">
                 <p class="user-comment"> {{comment.user.lastName}} {{comment.user.firstName}} </p>
-                <p class="comment-date">le {{ getDate(comment.updatedAt) }}</p>
+                <p class="comment-date">le {{ getDate(comment.createdAt) }}</p>
             </div>
             <div class="comment-text">
                 <p class="text">{{ comment.text }}</p> 
-                <button class="deleteCmt" type="submit" v-if="userId == comment.userId || isAdmin == 1" @click="deleteCmt(comment.id)"><fa icon="trash-alt"/></button> 
+                <button class="deleteCmt" type="submit" title="supprimer" v-if="userId == comment.userId || isAdmin == 1" @click="deleteCmt(comment.id)"><fa icon="trash-alt"/></button> 
             </div>
         </div>    
     </div> 
 </template>
 
 <script>
-import {mapActions, mapMutations, mapState} from 'vuex'
+import {mapActions, mapState} from 'vuex'
 
 export default {
     name:"Comment",
@@ -32,7 +32,7 @@ export default {
                 text:"",
                 userId:"",
                 postId:"",
-                updatedAt:null,
+                createdAt:null,
             }, 
             isAdmin: 0,         
         }
@@ -44,11 +44,12 @@ export default {
     },
     methods: {
         ...mapActions('comments', ['deleteComment']),
-        ...mapMutations('comments', ['reFreshPost']),
+        // fonction pour le format date
         getDate(datetime) {
             let date = new Date(datetime).toLocaleString()
             return date            
         },
+        // supression d'un commentaire
         deleteCmt(id) {
             const userId = this.userId;
             const isAdmin = 1 ;

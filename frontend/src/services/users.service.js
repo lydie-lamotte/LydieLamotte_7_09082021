@@ -2,7 +2,7 @@
 import axios from "axios" ;
 
 const apiUrl = "http://localhost:3000/api"
-
+//login
 function login(email, password) {
     return axios.post(`${apiUrl}/auth/login`, {email,password}) 
         .then(({data}) => {
@@ -15,7 +15,7 @@ function login(email, password) {
             return data
         });
 }
-
+// register
 function signup(user) {
     return axios.post(`${apiUrl}/auth/signup`, user)
         .then(({data}) => {
@@ -24,7 +24,7 @@ function signup(user) {
             localStorage.setItem('lastName',user.lastName);
         })
 }
-
+//logout
 function logout() {
     // remove user from local storage to log user out
     localStorage.removeItem('GPMANIA_user');

@@ -15,6 +15,7 @@
 export default {
     name: 'NavBar',
     methods: {
+        // déconnection
         logout() {
         localStorage.clear()
         this.$router.push("/")

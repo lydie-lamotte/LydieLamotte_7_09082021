@@ -2,7 +2,7 @@
     <form @submit.prevent="sendComment()">
         <div class="comment">
             <textarea v-model="text" id="text" type="text" placeholder="Commenter..."></textarea>
-            <button class="send" type="submit" ><fa icon="arrow-alt-circle-right"/></button>
+            <button class="send" type="submit" title="publier"><fa icon="arrow-alt-circle-right"/></button>
         </div>
     </form>
 </template>
@@ -32,11 +32,12 @@ export default {
     },
     methods: {
         ...mapActions('comments', ['addNewComment']),
+        // publier un commentaire
         sendComment() {
             this.submitted = true;
             const newComment = {
                 text: this.text,
-                userId: this.userId, // id utilisateur connecter,
+                userId: this.userId,
                 postId: this.post.id,
             }            
             if (this.text != null && newComment.postId) { 

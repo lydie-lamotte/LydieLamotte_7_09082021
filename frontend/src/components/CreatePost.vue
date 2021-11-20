@@ -40,10 +40,12 @@ export default {
     },
     methods: {
         ...mapActions('posts', ['addNewPost']),
+        // fonction selection du fichier
         onFileSelected(event) {
             console.log(event)
             this.image = event.target.files[0] || event.dataTransfer.files        
         },
+        // création de post
         createPost() {
             this.submitted = true;
             const formData = new FormData()
@@ -51,8 +53,7 @@ export default {
                 formData.append('content', this.content);
                 formData.append('image', this.image);
                 formData.append('userId', this.userId);
-                this.addNewPost( formData )  
-                window.location.reload() 
+                this.addNewPost( formData )   
             }  
         }                        
     }
