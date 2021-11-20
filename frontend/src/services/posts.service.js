@@ -27,11 +27,11 @@ function getAllPosts() {
 }
 
 //like un post
-function likePost(id,option) {
-    return axios.post(`${apiUrl}/post/`+ id +`/like`, option, {
+function likePost(id, option) {
+    return axios.post(`${apiUrl}/post/`+ id +`/like`, {option}, {
         headers: authHeader()
     })
-    .then((response) => console.log(response))
+    .then(({data}) => {return data})
 }
 
 export  const postService = {

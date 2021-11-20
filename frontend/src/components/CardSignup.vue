@@ -37,8 +37,7 @@ import { mapState, mapActions } from 'vuex'
 export default {
     name: "CardSignup",
     data() {
-        return {
-           
+        return {           
             firstName: "",
             lastName:"",
             email:"",

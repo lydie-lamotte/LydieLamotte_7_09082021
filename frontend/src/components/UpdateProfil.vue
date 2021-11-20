@@ -27,6 +27,7 @@
 <script>
 import axios from 'axios';
 
+
 export default {
     name: "UpdateProfil",
     data() {
@@ -36,7 +37,8 @@ export default {
             lastName: user.lastName,
             email: user.email, 
             token: localStorage.getItem('GPMANIA_token'),
-            userId: localStorage.getItem('userId')
+            userId: localStorage.getItem('userId'),
+            id: user.userId,
         }
     },
     methods: {
@@ -44,12 +46,12 @@ export default {
             this.$router.push('/MonProfil');
         },
         modifyProfil() {
-            const id = this.userId;
+            const id = this.id
             const user = {
                 firstName: this.firstName,
                 lastName: this.lastName,
                 email: this.email,
-            }
+            }            
             axios.put('http://localhost:3000/api/auth/modify/'+ id, user, {
                 headers : {
                 'Content-Type': 'application/json',
@@ -64,7 +66,7 @@ export default {
                 alert('votre profil est modifié!')
                 this.$router.push("/MonProfil")
             })
-            .catch((error) => {console.log(error)})
+            .catch((error) => {console.log(error)})           
         }
     }
 }

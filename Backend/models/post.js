@@ -30,36 +30,3 @@ module.exports = (sequelize, DataTypes) => {
 
 
 
-// ,{
-//     hooks:{
-//         beforCreate: function(p,options){
-//             let initial_likes = JSON.stringify([])
-//             p.usersLikes = initial_likes
-//             return p
-//         }
-//     }
-// }
-
-// post.prototype.addUsersLike = function(userId){
-//     // je recupere les likes and parsant en array
-//    let likes = JSON.parse(this.usersLikes)
-//    if(!likes.includes(userId)){
-//         // si l'utilisateur pas encore like    
-//         likes.push(userId)
-//         return JSON.stringify(likes)
-//    }
-// }
-
-// post.prototype.removeUsersLike = function(userId){
-//     // je recupere les likes and parsant en array
-//    let likes = JSON.parse(this.usersLikes)
-//     if(!likes.includes(userId)){
-//         // si l'utilisateur a deja like , on supprime    
-//         likes = likes.filter(item => item !=userId)
-//         return JSON.stringify(likes)
-//     }
-
-// }
-
-
-

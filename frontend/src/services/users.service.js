@@ -31,7 +31,6 @@ function logout() {
     localStorage.removeItem('GPMANIA_token');
 }
 
-
 export  const userService = {
     login,
     signup,

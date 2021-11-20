@@ -47,6 +47,7 @@ nav {
     display: flex;
     align-items: center;
     cursor: pointer;
+    justify-content: center;
 }
 /*portable*/
 @media screen and (max-width: 550px) {
@@ -54,7 +55,6 @@ nav {
         display: block;
     }
     .nav-link {
-        margin-left: 90px;
         margin-top: 30px;
     }
 }

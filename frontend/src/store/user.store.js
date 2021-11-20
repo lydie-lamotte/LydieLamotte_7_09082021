@@ -33,14 +33,18 @@ const actions = {
 
 const mutations = {
     loginRequestSuccess(state,user) {
-        state.user = user;
+        state.user = user
     },
     signupRequestSucess(state,user) {
-        state.user = user;
+        state.user = user
     },
     getAllFailure(state,error){
         state.error = error
-    }
+    },
+    logout(state) {
+        state.status = {};
+        state.user = null;
+    },
 }
 
 

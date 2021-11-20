@@ -17,7 +17,7 @@ const actions = {
                 return Promise.resolve()
             })
     },
-    loadPosts({ commit }, posts) {
+    loadPosts({ commit }) {
         return postService.getAllPosts(posts)
         .then ( data => {
             console.log(data);
@@ -32,11 +32,15 @@ const actions = {
             return Promise.resolve()
         })
     },
-    likePost ({commit}, post) {
-        return postService.likePost(post)
-        .then (post => {
-            commit('likePost', post)
-            return Promise.resolve()
+    likePost ({commit}, {id,option}) {
+        return postService.likePost(id,option)
+        .then (() => {
+            return postService.getAllPosts(posts)
+            .then ( data => {
+                console.log(data);
+                commit('getPosts', data.posts)
+                return Promise.resolve()
+            })
         })
     }
 };
@@ -48,20 +52,10 @@ const mutations = {
     getPosts(state,posts){
         state.posts = JSON.stringify(posts)
     },
-    reFreshPost (state,postId,newPost){
-        state.posts.map(post=>{
-            if(post.id==postId){
-                post = newPost
-            }
-        }) 
-    },
     deleteSuccess(state, postId) {
         let posts = state.posts.filter(post => post.id != postId)
         state.posts= posts
     },
-    likeSuccess(state,post) {
-        state.post = post
-    }
 }
 
 

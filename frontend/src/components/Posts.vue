@@ -11,9 +11,9 @@
                 <img id="image-post" :src="getPictureUrl(p.image)">
                 <p class="content">{{ p.content }}</p>
                 <div class="button">
-                    <button class="like" @click="like"><fa icon="thumbs-up"/></button>
-                    <p class="number-like">{{ p.usersLikes }} j'aime</p>
-                    <button class="delete" type="submit" v-if="userId == p.userId" @click="postDelete()"><fa icon="trash-alt"/></button> 
+                    <button class="like" @click="like(p)"><fa icon="thumbs-up"/></button>
+                    <p class="number-like">{{ (JSON.parse(p.usersLikes)).length }} j'aime</p>
+                    <button class="delete" type="submit" v-if="userId == p.userId || isAdmin == 1 " @click="postDelete(p.id)"><fa icon="trash-alt"/></button> 
                 </div>
                 <CreateComment  :post="p" />    
                 <Comment :comments ="p.comments" :postId="p.id" />          
@@ -48,7 +48,7 @@ export default {
                 userId: "",
                 content:"",
                 image:"",
-                usersLikes:[],
+                usersLikes: [],
                 id:"",
                 updatedAt: null,
             },
@@ -62,6 +62,7 @@ export default {
             },
             token: localStorage.getItem('GPMANIA_token'),
             userId: user.userId,
+            isAdmin: 0,
         }
     },
     computed: {
@@ -90,19 +91,27 @@ export default {
                 })
             
         },
-        like() {
-            const id = this.post.id
-            this.likePost(id)  
+        userAlreadyLikeThatPost(userId,stringArrayLikes){
+            let likes = JSON.parse(stringArrayLikes) ;
+            return likes.includes(userId)
         },
-        postDelete() {           
+        like(p) {
+            console.log(this.userId)
+            const alreadyLikes = this.userAlreadyLikeThatPost(this.userId,p.usersLikes)
+            console.log(`user already likes ${alreadyLikes}`);
+            const option = (alreadyLikes) ? -1 : 1 ;
+            console.log(`user option body send ${option}`)
+            this.likePost({id:p.id,option})   
+        },
+        postDelete(id) {           
             const userId = this.userId;
             const isAdmin = 1 ;
-            if (userId == this.user.id || isAdmin == 1) {
-                const id = this.post.id
-                this.deletePost(id)
+            const postUserId = this.post.userId
+            if (userId == postUserId || isAdmin == 1) {
                 const response = confirm(" Voulez vous supprimer ce post?")
                 if (response) {
-                    window.location.reload();
+                    this.deletePost(id)
+                    window.location.reload()          
                 }
             }
         }    
@@ -181,6 +190,7 @@ img {
     }
     img {
         width: 100%;
+        height: 400px;
     } 
     .post-date {
         font-size: 0.8em;

@@ -1,6 +1,6 @@
 import { commentService } from "../services/comments.service.js";
 
-const state = {
+const initiateState = {
     comment: {},
     comments:[]
 };
@@ -15,8 +15,8 @@ const actions = {
     }, 
     deleteComment ({ commit }, id) {
         return commentService.deleteOneComment(id) 
-        .then (() => {
-            commit('deleteCommentSuccess', id)
+        .then (comment => {
+            commit('deleteCommentSuccess', comment)
             return Promise.resolve()
         })
     }
@@ -29,21 +29,14 @@ const mutations = {
     deleteCommentSuccess(state, id) {
         let comments = state.comments.filter(comment => comment.id != id)
         state.comments= comments
-    },
-    reFreshComment (state, id, newComment){
-        state.comments.map(comment=>{
-            if (comment.id == id){
-                comment = newComment
-            }
-        }) 
-    },
+    },    
 }
 
 
 
 export const comments = {
     namespaced: true,
-    state,
+    initiateState,
     actions,
     mutations
 };

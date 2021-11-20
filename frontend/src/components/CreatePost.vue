@@ -11,7 +11,7 @@
             <label for="image">
                 <input type="file" name="image" @change="onFileSelected" id="image" required>
             </label>
-            <button type="submit">Envoyer</button>
+            <button type="submit">Publier</button>
         </form>      
     </div>    
 </template>
@@ -52,7 +52,6 @@ export default {
                 formData.append('image', this.image);
                 formData.append('userId', this.userId);
                 this.addNewPost( formData )  
-                alert('votre post est créé!')
                 window.location.reload() 
             }  
         }                        
@@ -86,12 +85,17 @@ export default {
     height: 30px;
 }
 button {
-    width: 150px;
-    height: 30px;
+    padding: 5px 20px;
     color: white;
-    background-color: rgb(240, 66, 66);
+    background-color: rgb(213, 137, 137);
     margin-top: 20px;
     margin-left: 45%;
     font-size: 1.2em;
+    opacity: 1;
+}
+button:hover {
+    color:black;
+    box-shadow: 5px 5px 30px rgb(155, 152, 152);
+    cursor: pointer;
 }
 </style>

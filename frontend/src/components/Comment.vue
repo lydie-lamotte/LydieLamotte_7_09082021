@@ -7,14 +7,14 @@
             </div>
             <div class="comment-text">
                 <p class="text">{{ comment.text }}</p> 
-                <button class="deleteCmt" type="submit" v-if="userId == comment.userId" @click="deleteCmt()"><fa icon="trash-alt"/></button> 
+                <button class="deleteCmt" type="submit" v-if="userId == comment.userId || isAdmin == 1" @click="deleteCmt(comment.id)"><fa icon="trash-alt"/></button> 
             </div>
         </div>    
     </div> 
 </template>
 
 <script>
-import {mapActions, mapMutations} from 'vuex'
+import {mapActions, mapMutations, mapState} from 'vuex'
 
 export default {
     name:"Comment",
@@ -33,25 +33,33 @@ export default {
                 userId:"",
                 postId:"",
                 updatedAt:null,
-            },          
+            }, 
+            isAdmin: 0,         
         }
     },
-   
+    computed: {
+        ...mapState([{
+            comments: state => state.comments,
+        }]),
+    },
     methods: {
         ...mapActions('comments', ['deleteComment']),
-        ...mapMutations('comments', ['reFreshComment']),
+        ...mapMutations('comments', ['reFreshPost']),
         getDate(datetime) {
             let date = new Date(datetime).toLocaleString()
             return date            
         },
-        deleteCmt() {
-            console.log(this.comment);
-            this.deleteComment(this.comment.id)
-            const response = confirm(" Voulez vous supprimer ce commentaire?");
-            if (response) {
-                this.reFreshComment()
-            }
-            
+        deleteCmt(id) {
+            const userId = this.userId;
+            const isAdmin = 1 ;
+            const commentUserId = this.comment.userId
+            if (userId == commentUserId || isAdmin == 1) { 
+                const response = confirm(" Voulez vous supprimer ce commentaire?");
+                if (response) {
+                    this.deleteComment(id)
+                    window.location.reload();
+                }
+            }            
         }
     }
     
@@ -98,5 +106,10 @@ export default {
 .deleteCmt:hover {
     opacity: 1;
 }
-
+/*portable*/
+@media screen and (max-width: 550px) { 
+    .info-user {
+        padding: 0;
+    } 
+}
 </style>

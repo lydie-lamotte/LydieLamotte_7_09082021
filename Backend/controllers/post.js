@@ -31,8 +31,8 @@ exports.createPost = (req, res, next) => {
 //Récupérer les posts
 exports.findAllPost = (req, res, next) => {
     Post.findAll({
-        include: [{model: User},{model: Comment, include: [{model: User}] }],
-        order: [['updatedAt','DESC']],
+        include: [{model: User},{model: Comment , where: { deleted_at: null }, include: [{model: User}] }],
+        order: [['createdAt','DESC']],
         where: { deleted_at: null },
     })
         .then(posts => {
@@ -93,25 +93,24 @@ exports.likePost = (req, res, next) => {
     })    
     .then(post => {
         if(post) {
+            let likes = JSON.parse(post.usersLikes)
             if (opt == 1) { 
-                let likes = JSON.parse(post.usersLikes)
                 if(!likes.includes(userId)) {
-                     // si l'utilisateur pas encore liké    
-                     likes.push(userId)
-                     likes =  JSON.stringify(likes)
+                    // si l'utilisateur pas encore liké    
+                    likes.push(userId)
+                    likes =  JSON.stringify(likes)
                 }
                 post.update({usersLikes:likes})
-                return res.status(201).json({ message: 'j\'aime'});
+                return res.status(201).json({ message: 'j\'aime',post});
             }                                 
             else if (opt == -1 ) {
-                let likes = JSON.parse(post.usersLikes)
                 if(likes.includes(userId)) {
                     // si l'utilisateur a deja liké , on supprime    
                     likes = likes.filter(item => item !=userId)
                     likes = JSON.stringify(likes)
                 }
                 post.update({ usersLikes:likes })
-                return res.status(201).json({ message: 'pas de préférence'});                     
+                return res.status(201).json({ message: 'pas de préférence',post});                     
             } 
         } else {
             res.status(404).json({message:"pas de post"})

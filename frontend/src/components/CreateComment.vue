@@ -42,7 +42,6 @@ export default {
             if (this.text != null && newComment.postId) { 
                 this.addNewComment(newComment)  
                 console.log(newComment)
-                alert('votre commentaire est créé!')
                 window.location.reload()
             }
         },
