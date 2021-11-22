@@ -1,14 +1,16 @@
 <template>
     <div>
         <div id="comments" v-for="comment in comments" :key="comment.id">
-            <div class="info-user">
-                <p class="user-comment"> {{comment.user.lastName}} {{comment.user.firstName}} </p>
-                <p class="comment-date">le {{ getDate(comment.createdAt) }}</p>
-            </div>
-            <div class="comment-text">
-                <p class="text">{{ comment.text }}</p> 
-                <button class="deleteCmt" type="submit" title="supprimer" v-if="userId == comment.userId || isAdmin == 1" @click="deleteCmt(comment.id)"><fa icon="trash-alt"/></button> 
-            </div>
+           <div v-if="comment.user">
+                <div class="info-user">
+                    <p class="user-comment"> {{comment.user.lastName}} {{comment.user.firstName}} </p>
+                    <p class="comment-date">le {{ getDate(comment.createdAt) }}</p>
+                </div>
+                <div class="comment-text">
+                    <p class="text">{{ comment.text }}</p> 
+                    <button class="deleteCmt" type="submit" title="supprimer" v-if="userId == comment.userId || isAdmin == 1" @click="deleteCmt(comment.id)"><fa icon="trash-alt"/></button> 
+                </div>
+           </div>
         </div>    
     </div> 
 </template>
@@ -44,21 +46,23 @@ export default {
     },
     methods: {
         ...mapActions('comments', ['deleteComment']),
+         ...mapActions('posts', ['loadPosts']),
         // fonction pour le format date
         getDate(datetime) {
             let date = new Date(datetime).toLocaleString()
             return date            
         },
         // supression d'un commentaire
-        deleteCmt(id) {
+        async deleteCmt(id) {
             const userId = this.userId;
             const isAdmin = 1 ;
             const commentUserId = this.comment.userId
             if (userId == commentUserId || isAdmin == 1) { 
                 const response = confirm(" Voulez vous supprimer ce commentaire?");
                 if (response) {
-                    this.deleteComment(id)
-                    window.location.reload();
+                    await this.deleteComment(id)
+                    await this.loadPosts()
+                    // window.location.reload();
                 }
             }            
         }

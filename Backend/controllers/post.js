@@ -31,9 +31,8 @@ exports.createPost = (req, res, next) => {
 //Récupérer les posts
 exports.findAllPost = (req, res, next) => {
     Post.findAll({
-        include: [{model: User},{model: Comment , where: { deleted_at: null }, include: [{model: User}] }],
         order: [['createdAt','DESC']],
-        where: { deleted_at: null },
+        include: [{model: User},{model: Comment, include: [{model: User}] }],
     })
         .then(posts => {
             let data = {
@@ -51,7 +50,7 @@ exports.findAllPost = (req, res, next) => {
 //Récupérer un post
 exports.findOnePost = (req, res, next) => {
     Post.findOne({
-        where: { id: req.params.id, deleted_at: null }
+        where: { id: req.params.id }
     })    
     .then(post => {
         let data = {
@@ -75,7 +74,7 @@ exports.modifyPost = (req, res, next) => {
 
 //Supprimer un post (soft delete)
 exports.deletePost = (req, res, next) => {
-    Post.update({ deleted_at: Date.now() },{
+    Post.destroy({
         where : { id: req.params.id }
     })
     .then(() => res.status(200).json({ message: 'Post supprimé' }))
@@ -89,7 +88,7 @@ exports.likePost = (req, res, next) => {
     let opt = req.body.option
     let userId = req.userId ;
     Post.findOne({
-        where: { id: postId, deleted_at: null }
+        where: { id: postId }
     })    
     .then(post => {
         if(post) {

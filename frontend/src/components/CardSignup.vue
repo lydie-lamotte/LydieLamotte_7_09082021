@@ -68,7 +68,7 @@ export default {
             }
             // vérification format du password
             else if (!validPassword.test(this.password)) {
-                this.error = "Le mot de passe n'est pas valide."
+                this.error = "Le mot de passe n'est pas valide. Il doit contenir 8 charactère avec au moins une minuscule, une majuscule, un symbole et un chiffre."
             }
             else {    
             const { firstName, lastName, email, password } = this;

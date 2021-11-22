@@ -20,7 +20,6 @@ const actions = {
     signup({ commit }, user) {
         return userService.signup(user)
             .then (user => {
-                console.log(user)
                 commit ('signupRequestSucess', user)
                 return Promise.resolve()
             })
@@ -29,6 +28,14 @@ const actions = {
         userService.logout();
         commit('logout');
     },
+    deleteUser({commit}, id) {
+        return userService.deleteUser(id)
+        .then (user => {
+            console.log(user)
+            commit ('deleteRequestSuccess', user)
+            return Promise.resolve()
+        })
+    }
 };
 
 const mutations = {
@@ -45,6 +52,9 @@ const mutations = {
         state.status = {};
         state.user = null;
     },
+    deleteRequestSuccess(state, user) {
+        state.user = user
+    }
 }
 
 

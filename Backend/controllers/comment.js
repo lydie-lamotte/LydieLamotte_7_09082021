@@ -24,8 +24,7 @@ exports.createComment = (req, res, next) => {
 exports.findAllComment = (req, res, next) => {
     Comment.findAll({
         include: [{model: User},{model: Post}],
-        order: [['createdAt','DESC']],
-        where: {deleted_at: null}
+        order: [['createdAt','DESC']]
     })
     .then(comments => {
         let data = {
@@ -39,7 +38,7 @@ exports.findAllComment = (req, res, next) => {
 //Récupérer un commentaire
 exports.findOneComment = (req, res, next) => {
     Comment.findOne({
-        where: {id: req.params.id, deleted_at: null}
+        where: {id: req.params.id}
     })
     .then(comment => res.status(200).json(comment))
     .catch(error => res.status(404).json({error}));         
@@ -60,7 +59,7 @@ exports.modifyComment = (req, res, next) => {
 
 //Supprimer un commentaire
 exports.deleteComment = (req, res, next) => {
-    Comment.update({deleted_at: Date.now()}, {
+    Comment.destroy({
         where: {id: req.params.id}
     })
     .then(() => res.status(200).json({ message: 'commentaire supprimée'}))

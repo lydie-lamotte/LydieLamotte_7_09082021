@@ -25,6 +25,8 @@ module.exports = (sequelize, DataTypes) => {
     }, {
         sequelize,
         modelName: 'comment',
+        paranoid: true,
+        deletedAt: 'deleted_at'
     });
     return Comment;
 };

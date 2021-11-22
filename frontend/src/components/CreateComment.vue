@@ -32,8 +32,9 @@ export default {
     },
     methods: {
         ...mapActions('comments', ['addNewComment']),
+        ...mapActions('posts', ['loadPosts']),
         // publier un commentaire
-        sendComment() {
+        async sendComment() {
             this.submitted = true;
             const newComment = {
                 text: this.text,
@@ -41,9 +42,12 @@ export default {
                 postId: this.post.id,
             }            
             if (this.text != null && newComment.postId) { 
-                this.addNewComment(newComment)  
-                console.log(newComment)
-                window.location.reload()
+                await this.addNewComment(newComment)  
+                // reset 
+                this.text=""
+                await this.loadPosts()
+                // console.log(newComment)
+                // window.location.reload()
             }
         },
     }

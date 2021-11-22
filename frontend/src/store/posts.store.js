@@ -13,10 +13,14 @@ const actions = {
     // ajout post
     addNewPost({ commit }, post) {
         return postService.addNewPost(post)
-            .then( post=>{
-                commit('addPostSuccess', post)
+        .then (() => {
+            return postService.getAllPosts(posts)
+            .then ( data => {
+                console.log(data);
+                commit('getPosts', data.posts)
                 return Promise.resolve()
             })
+        })
     },
     // récupération posts
     loadPosts({ commit }) {
@@ -54,9 +58,6 @@ const actions = {
 };
 
 const mutations = {
-    addPostSuccess(state,post) {
-        state.post = post;
-    },
     getPosts(state,posts){
         state.posts = JSON.stringify(posts)
     },

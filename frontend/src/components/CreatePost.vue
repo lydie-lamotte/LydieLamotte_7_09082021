@@ -9,7 +9,7 @@
             </label>  
         
             <label for="image">
-                <input type="file" name="image" @change="onFileSelected" id="image" required>
+                <input type="file"  name="image" @change="onFileSelected" id="image" required  :key="fileInputKey">
             </label>
             <button type="submit">Publier</button>
         </form>      
@@ -23,7 +23,8 @@ export default {
     name: 'CreatePost',
     data() {
         const user = JSON.parse(localStorage.getItem('GPMANIA_user'));
-        return {               
+        return {
+            fileInputKey: 0,               
             firstName: user.firstName,
             lastName: user.lastName, 
             id:"",
@@ -39,21 +40,26 @@ export default {
         }),
     },
     methods: {
-        ...mapActions('posts', ['addNewPost']),
+        ...mapActions('posts', ['addNewPost','loadPosts']),
         // fonction selection du fichier
         onFileSelected(event) {
             console.log(event)
             this.image = event.target.files[0] || event.dataTransfer.files        
         },
         // création de post
-        createPost() {
+        async createPost() {
             this.submitted = true;
             const formData = new FormData()
             if (this.image != null && this.content != null) {
                 formData.append('content', this.content);
                 formData.append('image', this.image);
                 formData.append('userId', this.userId);
-                this.addNewPost( formData )   
+                await this.addNewPost( formData ) 
+                // renitilise
+                this.content = null
+                this.image= null
+                this.fileInputKey++;
+                await this.loadPosts()
             }  
         }                        
     }

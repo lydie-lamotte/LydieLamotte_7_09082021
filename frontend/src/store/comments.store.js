@@ -28,9 +28,8 @@ const mutations = {
     addCommentSuccess(state,comment) {
         state.comment = comment;
     },
-    deleteCommentSuccess(state, id) {
-        let comments = state.comments.filter(comment => comment.id != id)
-        state.comments= comments
+    deleteCommentSuccess(state, comment) {
+        state.comment= comment
     },    
 }
 

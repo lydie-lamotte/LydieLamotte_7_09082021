@@ -7,12 +7,12 @@
             <p><strong>Email:</strong> {{email}}</p>
         </div>
         <button type="submit" class="update-profil" @click="updateProfil">Modifier mon profil</button>
-        <button type="submit" class="delete-profil" @click="deleteProfil">Supprimer mon profil</button>
+        <button type="submit" class="delete-profil" @click="deleteProfil(userId)">Supprimer mon profil</button>
     </div>
 </template>
 
 <script>
-import axios from 'axios';
+import { mapActions, mapState } from 'vuex'
 
 export default {
     name: "Profil",
@@ -26,20 +26,21 @@ export default {
             userId: user.userId
         }
     },
+    computed: {
+        ...mapState([{
+            users: state => state.users,
+        }]),
+    },
     methods: {
+        ...mapActions('users', ['deleteUser']),
         // suppression du profil
-        deleteProfil() {
-            const id = this.userId;
+        deleteProfil(id) {
+            const userId = this.userId;
             const isAdmin = 1 ;
-            if(id == id || isAdmin == 1) {
+            if(userId == id || isAdmin == 1) {
                 const response = confirm(" Voulez vous supprimer votre profil?");
                 if (response) {
-                    axios.delete('http://localhost:3000/api/auth/delete/' + id, {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization: "Bearer " + this.token
-                        }
-                    })
+                    this.deleteUser(id)
                     localStorage.clear();
                     this.$router.push('/');
                 }

@@ -1,4 +1,4 @@
-
+import { authHeader } from '../helpers/_auth-header.helper';
 import axios from "axios" ;
 
 const apiUrl = "http://localhost:3000/api"
@@ -30,9 +30,17 @@ function logout() {
     localStorage.removeItem('GPMANIA_user');
     localStorage.removeItem('GPMANIA_token');
 }
+//supprimer utilisateur
+function deleteUser(id) {
+    console.log(id);
+    return axios.delete(`${apiUrl}/auth/delete/`+ id ,{
+        headers: authHeader()
+    })
+}
 
 export  const userService = {
     login,
     signup,
-    logout
+    logout,
+    deleteUser
 }

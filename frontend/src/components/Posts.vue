@@ -2,21 +2,23 @@
    <div>
        <h3 v-if=loading>Loading ...</h3>
        <div v-else>
-           <div class="posts" v-for="p in posts" :key="p.id">
-                <div class="info-user">
+           <div  v-for="p in posts" :key="p.id">
+               <div class="posts" v-if="p.user">
+                   <div class="info-user">
                     <p class="user-name"> {{ p.user.lastName }} {{p.user.firstName}}</p>
                     <p class="post-date">publié le {{ getDate(p.createdAt)}}</p>
-                </div>
-                <br>
-                <img id="image-post" :src="getPictureUrl(p.image)">
-                <p class="content">{{ p.content }}</p>
-                <div class="button">
-                    <button class="like" title="j'aime" @click="like(p)"><fa icon="thumbs-up"/></button>
-                    <p class="number-like">{{ (JSON.parse(p.usersLikes)).length }} j'aime</p>
-                    <button class="delete" type="submit" title="supprimer" v-if="userId == p.userId || isAdmin == 1 " @click="postDelete(p.id)"><fa icon="trash-alt"/></button> 
-                </div>
-                <CreateComment  :post="p" />    
-                <Comment :comments ="p.comments" :postId="p.id" />          
+                    </div>
+                    <br>
+                    <img id="image-post" :src="getPictureUrl(p.image)">
+                    <p class="content">{{ p.content }}</p>
+                    <div class="button">
+                        <button class="like" title="j'aime" @click="like(p)"><fa icon="thumbs-up"/></button>
+                        <p class="number-like">{{ (JSON.parse(p.usersLikes)).length }} j'aime</p>
+                        <button class="delete" type="submit" title="supprimer" v-if="userId == p.userId || isAdmin == 1 " @click="postDelete(p.id)"><fa icon="trash-alt"/></button> 
+                    </div>
+                    <CreateComment  :post="p" />    
+                    <Comment :comments ="p.comments" :postId="p.id" />   
+               </div> 
             </div>
        </div>
    </div>  
