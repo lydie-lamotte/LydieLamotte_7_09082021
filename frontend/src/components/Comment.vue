@@ -8,7 +8,7 @@
                 </div>
                 <div class="comment-text">
                     <p class="text">{{ comment.text }}</p> 
-                    <button class="deleteCmt" type="submit" title="supprimer" v-if="userId == comment.userId || isAdmin == 1" @click="deleteCmt(comment.id)"><fa icon="trash-alt"/></button> 
+                    <button class="deleteCmt" type="submit" title="supprimer" v-if="userId == comment.userId || isAdmin" @click="deleteCmt(comment.id)"><fa icon="trash-alt"/></button> 
                 </div>
            </div>
         </div>    
@@ -36,7 +36,7 @@ export default {
                 postId:"",
                 createdAt:null,
             }, 
-            isAdmin: 0,         
+            isAdmin: user.isAdmin,         
         }
     },
     computed: {
@@ -55,14 +55,13 @@ export default {
         // supression d'un commentaire
         async deleteCmt(id) {
             const userId = this.userId;
-            const isAdmin = 1 ;
+            const isAdmin = this.isAdmin ;
             const commentUserId = this.comment.userId
-            if (userId == commentUserId || isAdmin == 1) { 
+            if (userId == commentUserId || isAdmin) { 
                 const response = confirm(" Voulez vous supprimer ce commentaire?");
                 if (response) {
                     await this.deleteComment(id)
                     await this.loadPosts()
-                    // window.location.reload();
                 }
             }            
         }

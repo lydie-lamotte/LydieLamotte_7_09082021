@@ -46,8 +46,6 @@ export default {
                 // reset 
                 this.text=""
                 await this.loadPosts()
-                // console.log(newComment)
-                // window.location.reload()
             }
         },
     }

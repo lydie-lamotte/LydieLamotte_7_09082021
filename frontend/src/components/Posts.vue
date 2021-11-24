@@ -14,7 +14,7 @@
                     <div class="button">
                         <button class="like" title="j'aime" @click="like(p)"><fa icon="thumbs-up"/></button>
                         <p class="number-like">{{ (JSON.parse(p.usersLikes)).length }} j'aime</p>
-                        <button class="delete" type="submit" title="supprimer" v-if="userId == p.userId || isAdmin == 1 " @click="postDelete(p.id)"><fa icon="trash-alt"/></button> 
+                        <button class="delete" type="submit" title="supprimer" v-if="userId == p.userId || isAdmin" @click="postDelete(p.id)"><fa icon="trash-alt"/></button> 
                     </div>
                     <CreateComment  :post="p" />    
                     <Comment :comments ="p.comments" :postId="p.id" />   
@@ -45,6 +45,7 @@ export default {
                 firstName:"",
                 lastname: "",
                 id:"",
+                isAdmin: "",
             },
             post: { 
                 userId: "",
@@ -64,7 +65,7 @@ export default {
             },
             token: localStorage.getItem('GPMANIA_token'),
             userId: user.userId,
-            isAdmin: 0,
+            isAdmin:user.isAdmin
         }
     },
     computed: {
@@ -113,9 +114,9 @@ export default {
         // suppression du post
         postDelete(id) {           
             const userId = this.userId;
-            const isAdmin = 1 ;
+            const isAdmin = this.isAdmin ;
             const postUserId = this.post.userId
-            if (userId == postUserId || isAdmin == 1) {
+            if (userId == postUserId || isAdmin) {
                 const response = confirm(" Voulez vous supprimer ce post?")
                 if (response) {
                     this.deletePost(id)          

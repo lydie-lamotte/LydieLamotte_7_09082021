@@ -32,7 +32,7 @@ exports.createPost = (req, res, next) => {
 exports.findAllPost = (req, res, next) => {
     Post.findAll({
         order: [['createdAt','DESC']],
-        include: [{model: User},{model: Comment, include: [{model: User}] }],
+        include: [{model: User},{model: Comment, include: [{model: User}], order: [['createdAt','DESC']] }],
     })
         .then(posts => {
             let data = {
