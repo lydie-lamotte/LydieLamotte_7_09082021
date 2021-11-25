@@ -45,7 +45,6 @@ export default {
                 firstName:"",
                 lastname: "",
                 id:"",
-                isAdmin: "",
             },
             post: { 
                 userId: "",
@@ -113,14 +112,9 @@ export default {
         },
         // suppression du post
         postDelete(id) {           
-            const userId = this.userId;
-            const isAdmin = this.isAdmin ;
-            const postUserId = this.post.userId
-            if (userId == postUserId || isAdmin) {
-                const response = confirm(" Voulez vous supprimer ce post?")
-                if (response) {
-                    this.deletePost(id)          
-                }
+            const response = confirm(" Voulez vous supprimer ce post?")
+            if (response) {
+                this.deletePost(id)          
             }
         }    
     }   

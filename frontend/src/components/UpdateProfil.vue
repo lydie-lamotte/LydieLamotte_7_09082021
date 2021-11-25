@@ -37,8 +37,8 @@ export default {
             lastName: user.lastName,
             email: user.email, 
             token: localStorage.getItem('GPMANIA_token'),
-            userId: localStorage.getItem('userId'),
             id: user.userId,
+            isAdmin: user.isAdmin
         }
     },
     methods: {
@@ -53,6 +53,8 @@ export default {
                 firstName: this.firstName,
                 lastName: this.lastName,
                 email: this.email,
+                userId: this.id,
+                isAdmin: this.isAdmin
             }            
             axios.put('http://localhost:3000/api/auth/modify/'+ id, user, {
                 headers : {
@@ -61,7 +63,6 @@ export default {
                 }
             })
             .then((response) => { 
-                console.log(response);
                 localStorage.removeItem('GPMANIA_user');
                 let user = response.config.data;
                 localStorage.setItem('GPMANIA_user',user);

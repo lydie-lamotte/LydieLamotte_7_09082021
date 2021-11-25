@@ -54,16 +54,11 @@ export default {
         },
         // supression d'un commentaire
         async deleteCmt(id) {
-            const userId = this.userId;
-            const isAdmin = this.isAdmin ;
-            const commentUserId = this.comment.userId
-            if (userId == commentUserId || isAdmin) { 
-                const response = confirm(" Voulez vous supprimer ce commentaire?");
-                if (response) {
-                    await this.deleteComment(id)
-                    await this.loadPosts()
-                }
-            }            
+            const response = confirm(" Voulez vous supprimer ce commentaire?");
+            if (response) {
+                await this.deleteComment(id)
+                await this.loadPosts()
+            }                        
         }
     }
     
